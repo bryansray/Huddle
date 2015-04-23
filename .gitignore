@@ -16,6 +16,9 @@ pids
 # node-waf configuration
 .lock-wscript
 
+# No need to put this in the repository
+public
+
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
