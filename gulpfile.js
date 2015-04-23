@@ -1,9 +1,12 @@
 var path = require('path');
 
 var gulp = require('gulp'),
+		chalk = require('chalk'),
+		del = require('del'),
 		requireDir = require('require-dir'),
 		debowerify = require('debowerify'),
 		babelify = require('babelify'),
+		mocha = require('gulp-mocha'),
 		plugins = require('gulp-load-plugins')({ rename: {
 				"gulp-ruby-sass": "sass"
 			}
@@ -28,6 +31,15 @@ var config = {
 			verbose: true,
 			lineNumbers: true
 		}
+	},
+
+	browserify: { 
+		debug: true, 
+		transform: [debowerify, babelify] 
+	},
+
+	mocha: {
+		// reporter: 'dot'
 	}
 };
 
@@ -37,15 +49,19 @@ var config = {
 gulp.task('help', plugins.taskListing);
 
 // *****************************************************************
+// General Compilation Tasks
+// *****************************************************************
+gulp.task('clean:javascript', function() {
+	del('public/javascript');
+});
+
+// *****************************************************************
 // Compilation Tasks
 // *****************************************************************
 gulp.task('compile:javascript', function() {
-	gulp.src('bower_components/jquery/dist/jquery.js')
-			.pipe(gulp.dest('public/javascripts'));
-
-	gulp.src('app/assets/javascript/application.js')
-			.pipe(plugins.browserify({ transform: [debowerify, babelify] }))
-			.pipe(gulp.dest('public/javascripts'));
+	gulp.src('app/assets/javascript/**/*.js')
+			.pipe(plugins.browserify(config.browserify))
+			.pipe(gulp.dest('public/javascript'));
 });
 
 gulp.task('compile:stylesheets', function() {
@@ -74,6 +90,14 @@ gulp.task("lint:stylesheets", function() {
 });
 
 gulp.task('lint', ['lint:javascript', 'lint:stylesheets']);
+
+// *****************************************************************
+//  Test Tasks
+// *****************************************************************
+gulp.task("test:javascript", function() {
+	gulp.src('./app/tests/**/*_spec.js')
+		.pipe(mocha(config.mocha));
+});
 
 // *****************************************************************
 // 
