@@ -39,7 +39,6 @@ var config = {
 	},
 
 	mocha: {
-		// reporter: 'dot'
 	}
 };
 
@@ -54,6 +53,12 @@ gulp.task('help', plugins.taskListing);
 gulp.task('clean:javascript', function() {
 	del('public/javascript');
 });
+
+gulp.task('clean:stylesheets', function() {
+	del('public/stylesheets');
+});
+
+gulp.task('clean', ['clean:stylesheets', 'clean:javascript']);
 
 // *****************************************************************
 // Compilation Tasks
@@ -105,6 +110,7 @@ gulp.task("test:javascript", function() {
 gulp.task('server', function() {
 	plugins.nodemon({
 		script: './app.js',
+		ignore: ['app/assets/', 'public', 'tests', 'bin', 'lib', 'node_modules', 'bower_components', '.git'],
 		ext: 'js html',
 		env: { 'NODE_ENV': 'development' }
 	});
@@ -114,6 +120,6 @@ gulp.task('server', function() {
 // 
 // *****************************************************************
 gulp.task('watch', function() {
-	gulp.watch('app/assets/stylesheets/**/*.scss', ['sass']);
-	// gulp.watch('app/assets/javascripts/**/*.js', ['javascripts'])
+	gulp.watch('app/assets/stylesheets/**/*.scss', ['lint:stylesheets', 'compile:stylesheets']);
+	gulp.watch('app/assets/javascript/**/*.js', ['lint:javascript', 'compile:javascript']);
 });
