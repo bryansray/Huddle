@@ -1,0 +1,3 @@
+export let index = function(req, res) {
+	res.render('home/index');
+};
