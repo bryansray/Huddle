@@ -30,6 +30,12 @@ var config = {
 		}
 	},
 
+	jshint: {
+		esnext: true,
+
+		reporter: 'jshint-stylish'
+	},
+
 	browserify: { 
 		debug: true, 
 		transform: [babelify] 
@@ -82,8 +88,8 @@ gulp.task('compile', ['compile:javascript', 'compile:stylesheets']);
 // *****************************************************************
 gulp.task("lint:javascript", function() {
 	return gulp.src('./app/**/*.js')
-		.pipe(plugins.jshint())
-		.pipe(plugins.jshint.reporter('jshint-stylish'));
+		.pipe(plugins.jshint(config.jshint))
+		.pipe(plugins.jshint.reporter(config.jshint.reporter));
 });
 
 gulp.task("lint:stylesheets", function() {
