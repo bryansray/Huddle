@@ -4,7 +4,6 @@ var gulp = require('gulp'),
 		chalk = require('chalk'),
 		del = require('del'),
 		requireDir = require('require-dir'),
-		debowerify = require('debowerify'),
 		babelify = require('babelify'),
 		mocha = require('gulp-mocha'),
 		plugins = require('gulp-load-plugins')({ rename: {
@@ -20,8 +19,6 @@ require('jshint-stylish');
 var dir = requireDir('./lib/tasks');
 
 var config = {
-	bowerDir: './bower_components',
-
 	sass: {
 		sassPath: './app/assets/stylesheets',
 		outputPath: './public/stylesheets',
@@ -35,7 +32,7 @@ var config = {
 
 	browserify: { 
 		debug: true, 
-		transform: [debowerify, babelify] 
+		transform: [babelify] 
 	},
 
 	mocha: {
