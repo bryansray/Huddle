@@ -50,11 +50,10 @@ module.exports = function(db) {
 		app.set('view cache', false);
 	} else if (process.env.NODE_ENV === 'production') {
 		app.locals.cache = 'memory';
+		app.disable('x-powered-by');
 	}
 
 	app.use(helmet());
-
-	app.disable('x-powered-by');
 
 	app.use(express.static(path.join(process.cwd(), 'public')));
 
