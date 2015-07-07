@@ -1,84 +1,44 @@
 var Ractive = require('ractive'),
+		superagent = require('superagent'),
+		_ = require('lodash'),
 		helpers = require('./helpers');
 
-var ChannelsComponent = require('./components/channels');
+var ChannelsComponent = require('./components/channels'),
+		ChannelMessagesComponent = require('./components/channelMessages'),
+		ChannelUsersComponent = require('./components/channelUsers');
 
-var ChannelMessagesComponent = Ractive.extend({
-	template: '#channel-messages-template',
+var ChannelComponent = Ractive.extend({
+	template: "#channel-template",
 
-	data: function() {
-		return { 
-			messages: [
-				{ messageId: 1, user: "Bryan Ray", text: "This is a message.", timestamp: new Date(2015, 6, 6, 10, 12, 28) },
-				{ messageId: 2, user: "Curtis Schlak", text: "This is another message for the channel.", timestamp: new Date(2015, 6, 6, 10, 22, 28, 0) },
-				{ messageId: 3, user: "Heather Wood", text: "I'm going to type something very long to make sure that it wraps across the screen. I want to make sure that I didn't break anything by putting it in to a javascript template.", timestamp: new Date(2015, 6, 6, 10, 32, 28, 0) },
-			],
-			messageInput: "" 
-		};
-	},
-
-	oninit: function() { 
-		this.on('typing', this.handleTyping);
-		this.on('messageSubmit', this.messageSubmit);
-	},
-
-	messageSubmit: function() {
-		console.log("Submit message ...");
-	},
-
-	handleTyping: function(event) {
-		if (event.original.keyCode === 13 && event.original.shiftKey === false) {
-			event.original.preventDefault();
-			var message = this.get('messageInput');
-			console.log("send: ", message);
-
-			this.clearMessage();
-		}
-	},
-
-	clearMessage: function() {
-		this.set('messageInput', '');
-	}
-});
-
-var ChannelUserComponent = Ractive.extend({
-	template: '#channel-user-template',
-
-	oninit: function() { },
-
-	computed: { displayName: '${firstName} + " " + ${lastName}' }
-});
-
-var ChannelUsersComponent = Ractive.extend({
-	template: '#channel-users-template',
-	oninit: function() {
-		console.log("Initializing Channel Users ...");
-	},
-
-	components: { ChannelUser: ChannelUserComponent },
-
-	data: function() {
-		return { 
-			users: [
-				{ userId: 1, firstName: "Bryan", lastName: "Ray", status: "active" },
-				{ userId: 2, firstName: "Curtis", lastName: "Schlak", status: "active" },
-				{ userId: 3, firstName: "Heather", lastName: "Wood", status: "active" },
-				{ userId: 4, firstName: "Lindsey", lastName: "Ray", status: "idle" },
-				{ userId: 4, firstName: "Kylie", lastName: "Ray", status: "offline" },
-			]
-		}
+	components: {
+		ChannelMessages: ChannelMessagesComponent,
+		ChannelUsers: ChannelUsersComponent
 	}
 });
 
 var huddle = new Ractive({
- el: '#huddle-app',
- template: '#huddle-template',
+	el: '#huddle-app',
+	template: '#huddle-template',
 
- components: { 
- 	ChannelsList: ChannelsComponent,
- 	ChannelMessages: ChannelMessagesComponent,
- 	ChannelUsers: ChannelUsersComponent
- }
+	oninit: function() {
+		this.on('ChannelsList.load-channel', this.activateChannel);
+	},
+
+	components: { 
+		Channel: ChannelComponent,
+		ChannelsList: ChannelsComponent,
+	},
+
+	activateChannel: function(event, channel) {
+		var activeChannel = this.get('activeChannel');
+
+		if (activeChannel !== channel) {
+			var url = '/channels/' + channel._id;
+			superagent.get(url, _.bind(function(data, response) {
+				this.set('activeChannel', channel);
+			}, this));
+		}
+	}
 });
 
 // var io = require('socket.io-client');

@@ -9,19 +9,21 @@ block content
 				<ChannelsList>
 
 			div#chat-area-container.flexitem.chat-area
-				header.room-header
-					div.room-header-inner
-						//- i.fa.fa-lock.fa-2x
-						div.page-header-main
-							h3 General Discussion
-							p A description of the channel.
-				section#room-container.flexbox.room-container
-					div#chat-message-area.flexitem.chat-message-area
-						<ChannelMessages>
+				<Channel channel=" {{ activeChannel }}" >
 
-					div#sidebar-right.flexitem.sidebar-right
-						<ChannelUsers>
+	script#channel-template(type='text/ractive')
+		header.room-header
+			div.room-header-inner
+				//- i.fa.fa-lock.fa-2x
+				div.page-header-main
+					h3 {{ channel.name }}
+					p {{ channel.description }}
+		section#room-container.flexbox.room-container
+			div#chat-message-area.flexitem.chat-message-area
+				<ChannelMessages>
 
+			div#sidebar-right.flexitem.sidebar-right
+				<ChannelUsers>
 	script#channel-users-template(type='text/ractive')
 		div#chat-users.users
 			ul.users-list.sidebar-nav
@@ -57,5 +59,5 @@ block content
 					strong Rooms
 				{{ #each channels }}
 				li#room-name.room-name
-					a(href="#", class="{{ this === ~/activeChannel ? 'active' : '' }}", on-click="load-channel:{{ . }}") {{ name }}
+					a(href="#", class="{{ this === activeChannel ? 'active' : '' }}", on-click="load-channel:{{ . }}") {{ name }}
 				{{ /each}}

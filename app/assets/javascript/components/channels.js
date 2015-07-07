@@ -16,15 +16,7 @@ var ChannelsComponent = Ractive.extend({
 	},
 
 	loadChannel: function(event, channel) {
-		var activeChannel = this.get('activeChannel');
-		if (activeChannel !== channel) {
-			var url = '/channels/' + channel.channelId;
-			superagent.get(url, function(data, response) {
-				console.log(response.body);
-			});
-
-			this.set('activeChannel', channel);
-		}
+		this.set('activeChannel', channel);
 	}
 });
 
