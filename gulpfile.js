@@ -67,7 +67,7 @@ gulp.task('clean:fonts', function() {
 	del('public/fonts');
 });
 
-gulp.task('clean', ['clean:stylesheets', 'clean:javascript']);
+gulp.task('clean', ['clean:stylesheets', 'clean:javascript', 'clean:fonts']);
 
 // *****************************************************************
 // Compilation Tasks
@@ -99,7 +99,7 @@ gulp.task('compile:fonts', function() {
 	.pipe(gulp.dest(config.sass.outputPath));
 });
 
-gulp.task('compile', ['compile:javascript', 'compile:stylesheets']);
+gulp.task('compile', ['compile:javascript', 'compile:stylesheets', 'compile:fonts']);
 
 // *****************************************************************
 // Lint Tasks
