@@ -1,6 +1,6 @@
 module.exports = {
 	db: {
-		uri: 'mongodb://localhost/construct',
+		uri: 'mongodb://localhost/huddle',
 		options: {
 			user: '',
 			pass: ''
