@@ -40,7 +40,8 @@ var config = {
 
 	browserify: { 
 		debug: true, 
-		transform: [babelify] 
+		transform: [babelify],
+		paths: ['./node_modules', './app/assets/javascript']
 	},
 
 	mocha: {
