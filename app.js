@@ -21,7 +21,8 @@ var app = require('./config/express')(db);
 
 // require('./config/password')();
 
-app.listen(config.port);
+var server = app.listen(config.port);
+var socket = require('./config/socket')(server);
 
 exports = module.exports = app;
 
