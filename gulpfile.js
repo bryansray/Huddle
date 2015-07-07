@@ -22,17 +22,19 @@ var config = {
 	sass: {
 		sassPath: './app/assets/stylesheets',
 		outputPath: './public/stylesheets',
+
 		options: {
 			sourcemap: true,
 			compass: true,
 			verbose: true,
-			lineNumbers: true
+			lineNumbers: true,
+
+			loadPath: './node_modules/font-awesome/scss',
 		}
 	},
 
 	jshint: {
-		esnext: true,
-
+		config: { esnext: true },
 		reporter: 'jshint-stylish'
 	},
 
@@ -61,6 +63,10 @@ gulp.task('clean:stylesheets', function() {
 	del('public/stylesheets');
 });
 
+gulp.task('clean:fonts', function() {
+	del('public/fonts');
+});
+
 gulp.task('clean', ['clean:stylesheets', 'clean:javascript']);
 
 // *****************************************************************
@@ -77,8 +83,20 @@ gulp.task('compile:stylesheets', function() {
 		.on('error', function(err) {
 			console.log("Error: ", err.message);
 		})
+		.pipe(plugins.autoprefixer())
 		.pipe(plugins.sourcemaps.write())
 		.pipe(gulp.dest(config.sass.outputPath));
+});
+
+gulp.task('compile:fonts', function() {
+	gulp.src('./node_modules/font-awesome/fonts/*')
+	.pipe(gulp.dest('public/fonts'));
+
+	return plugins.sass('./node_modules/font-awesome/scss', config.sass.options)
+	.on('error', function(err) { console.log("Error: ", err.message) })
+	.pipe(plugins.autoprefixer())
+	.pipe(plugins.sourcemaps.write())
+	.pipe(gulp.dest(config.sass.outputPath));
 });
 
 gulp.task('compile', ['compile:javascript', 'compile:stylesheets']);
@@ -88,7 +106,7 @@ gulp.task('compile', ['compile:javascript', 'compile:stylesheets']);
 // *****************************************************************
 gulp.task("lint:javascript", function() {
 	return gulp.src('./app/**/*.js')
-		.pipe(plugins.jshint(config.jshint))
+		.pipe(plugins.jshint(config.jshint.config))
 		.pipe(plugins.jshint.reporter(config.jshint.reporter));
 });
 
@@ -124,5 +142,5 @@ gulp.task('server', function() {
 // *****************************************************************
 gulp.task('watch', function() {
 	gulp.watch('app/assets/stylesheets/**/*.scss', ['lint:stylesheets', 'compile:stylesheets']);
-	gulp.watch('app/assets/javascript/**/*.js', ['lint:javascript', 'compile:javascript']);
+	gulp.watch('app/assets/javascript/**/*.js', [/*'lint:javascript', */'compile:javascript']);
 });
