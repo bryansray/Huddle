@@ -1,7 +1,11 @@
 doctype html
 html
   head
-    title= title
+    title Huddle .:. #{title}
+
     link(rel='stylesheet', href='/stylesheets/application.css')
+    //- link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css')
   body
     block content
+
+    script(src='/javascript/application.js')

@@ -1,5 +1,61 @@
 extends ../shared/layouts/application
 
 block content
-	p 
-		a.red(href='#') Hello, World
+	div#huddle-app
+
+	script#huddle-template(type='text/ractive')
+		div#huddle-app.flexbox.huddle-container
+			div#left-sidebar.flexitem.sidebar.sidebar-left
+				<ChannelsList>
+
+			div#chat-area-container.flexitem.chat-area
+				header.room-header
+					div.room-header-inner
+						//- i.fa.fa-lock.fa-2x
+						div.page-header-main
+							h3 General Discussion
+							p A description of the channel.
+				section#room-container.flexbox.room-container
+					div#chat-message-area.flexitem.chat-message-area
+						<ChannelMessages>
+
+					div#sidebar-right.flexitem.sidebar-right
+						<ChannelUsers>
+
+	script#channel-users-template(type='text/ractive')
+		div#chat-users.users
+			ul.users-list.sidebar-nav
+				{{ #each users }}
+				<ChannelUser firstName="{{ firstName }}" lastName=" {{ lastName }}">
+				{{ /each }}
+
+	script#channel-user-template(type='text/ractive')
+		li.user-information
+			div.user-metadata
+				a(href="#") 
+					i.fa.fa-circle(class="{{ status }}")
+					| {{ displayName }}
+
+	script#channel-messages-template(type='text/ractive')
+		div.scroll-wrapper
+			div.flexbox.chat-message-wrapper
+				div#chat-messages.flexitem.messages
+					{{ #each messages }}
+					div#chat-message-container.message-container.flexbox
+						div#chat-username.flexitem.username {{ user }}
+						div#chat-message.flexitem.message {{ text }}
+						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(timestamp) }}") {{ formatTime(timestamp) }}
+					{{ /each }}
+		div#chat-input-area.flexitem.chat-input-container
+			form(action='/channels/1/messages' method='POST' on-submit="messageSubmit")
+				textarea#message-input.huddle-message-input(autofocus='true', value="{{ messageInput }}", on-keypress="typing" on-keydown-input="set('messageInput', event.node.value)")
+
+	script#channels-template(type='text/ractive')
+		div#active-rooms.rooms-wrapper
+			ul#rooms-container.rooms-container.sidebar-nav
+				li.sidebar-heading 
+					strong Rooms
+				{{ #each channels }}
+				li#room-name.room-name
+					a(href="#", class="{{ this === ~/activeChannel ? 'active' : '' }}", on-click="load-channel:{{ . }}") {{ name }}
+				{{ /each}}
