@@ -1,7 +1,7 @@
 module.exports = {
 	app: {
-		title: "ConstructJS",
-		description: "",
+		title: "Huddle",
+		description: "A small chat application for small to medium sized teams.",
 		keywords: ""
 	},
 
