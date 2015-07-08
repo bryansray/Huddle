@@ -1,10 +1,10 @@
 var mongoose = require('mongoose'),
-		Channel = mongoose.model('Channel');
+		Room = mongoose.model('room');
 
 exports.index = function(req, res) {
-	var channelId = req.params.channelId;
+	var roomId = req.params.roomId;
 
-	Channel.findOne({ _id: channelId }, function(err, channel) {
-		return res.json(channel);
+	Room.findOne({ _id: roomId }, function(err, room) {
+		return res.json(room);
 	});
 }

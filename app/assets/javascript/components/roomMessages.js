@@ -2,8 +2,8 @@ var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash');
 
-var ChannelMessagesComponent = Ractive.extend({
-	template: '#channel-messages-template',
+var RoomMessagesComponent = Ractive.extend({
+	template: '#room-messages-template',
 
 	data: function() {
 		return { 
@@ -16,11 +16,11 @@ var ChannelMessagesComponent = Ractive.extend({
 		this.on('typing', this.handleTyping);
 		this.on('messageSubmit', this.messageSubmit);
 
-		this.root.on('ChannelsList.load-channel', _.bind(this.getChannelMessages, this));
+		this.root.on('RoomList.load-room', _.bind(this.getRoomMessages, this));
 	},
 
-	getChannelMessages: function(event, channel) {
-		var url = "/channels/" + channel._id + "/messages";
+	getRoomMessages: function(event, room) {
+		var url = "/rooms/" + room._id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
 			this.set('messages', response.body.messages);
@@ -46,4 +46,4 @@ var ChannelMessagesComponent = Ractive.extend({
 	}
 });
 
-module.exports = ChannelMessagesComponent;
+module.exports = RoomMessagesComponent;

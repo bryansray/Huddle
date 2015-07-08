@@ -5,6 +5,6 @@ var schema = mongoose.Schema({
 	description: String
 });
 
-var Channel = mongoose.model('Channel', schema);
+var Room = mongoose.model('room', schema);
 
-module.exports = Channel;
+module.exports = Room;

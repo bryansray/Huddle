@@ -5,28 +5,28 @@ var Ractive = require('ractive'),
 		socket = io('http://localhost:3000'),
 		helpers = require('./helpers');
 
-var ChannelsComponent = require('./components/channels'),
-		ChannelMessagesComponent = require('./components/channelMessages'),
-		ChannelUsersComponent = require('./components/channelUsers');
+var RoomsComponent = require('./components/rooms'),
+		RoomMessagesComponent = require('./components/roomMessages'),
+		RoomUsersComponent = require('./components/roomUsers');
 
-var ChannelComponent = Ractive.extend({
-	template: "#channel-template",
+var RoomComponent = Ractive.extend({
+	template: "#room-template",
 
 	components: {
-		ChannelMessages: ChannelMessagesComponent,
-		ChannelUsers: ChannelUsersComponent
+		RoomMessages: RoomMessagesComponent,
+		RoomUsers: RoomUsersComponent
 	},
 
 	oninit: function() {
-		this.root.on('ChannelsList.load-channel', _.bind(this.activateChannel, this));
+		this.root.on('RoomList.load-room', _.bind(this.activateRoom, this));
 	},
 
-	activateChannel: function(event, channel) {
-		var currentChannel = this.get('channel');
+	activateRoom: function(event, room) {
+		var currentRoom = this.get('room');
 		
-		if (currentChannel !== channel) {
-			this.set('channel', channel);
-			socket.emit('join', { userId: 1, channelId: channel._id });
+		if (currentRoom !== room) {
+			this.set('room', room);
+			socket.emit('join', { userId: 1, roomId: room._id });
 		}
 	}
 });
@@ -36,8 +36,8 @@ var huddle = new Ractive({
 	template: '#huddle-template',
 
 	components: { 
-		Channel: ChannelComponent,
-		ChannelsList: ChannelsComponent,
+		Room: RoomComponent,
+		RoomList: RoomsComponent,
 	}
 });
 

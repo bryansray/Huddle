@@ -1,14 +1,14 @@
 var home = require('../controllers/home'),
-		channels = require('../controllers/channels'),
+		rooms = require('../controllers/rooms'),
 		messages = require('../controllers/messages');
 
 module.exports = function(app) {
 	app.route('/').get(home.index);
 
-	// Channels
-	app.route('/channels').get(channels.index);
-	app.route('/channels/:id').get(channels.show);
+	// Rooms
+	app.route('/rooms').get(rooms.index);
+	app.route('/rooms/:id').get(rooms.show);
 
 	// Messages
-	app.route('/channels/:channelId/messages').get(messages.index);
+	app.route('/rooms/:roomId/messages').get(rooms.index);
 };

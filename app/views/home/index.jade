@@ -6,39 +6,39 @@ block content
 	script#huddle-template(type='text/ractive')
 		div#huddle-app.flexbox.huddle-container
 			div#left-sidebar.flexitem.sidebar.sidebar-left
-				<ChannelsList>
+				<RoomList>
 
 			div#chat-area-container.flexitem.chat-area
-				<Channel >
+				<Room>
 
-	script#channel-template(type='text/ractive')
+	script#room-template(type='text/ractive')
 		header.room-header
 			div.room-header-inner
 				//- i.fa.fa-lock.fa-2x
 				div.page-header-main
-					h3 {{ channel.name }}
-					p {{ channel.description }}
+					h3 {{ room.name }}
+					p {{ room.description }}
 		section#room-container.flexbox.room-container
 			div#chat-message-area.flexitem.chat-message-area
-				<ChannelMessages>
+				<RoomMessages>
 
 			div#sidebar-right.flexitem.sidebar-right
-				<ChannelUsers>
-	script#channel-users-template(type='text/ractive')
+				<RoomUsers>
+	script#room-users-template(type='text/ractive')
 		div#chat-users.users
 			ul.users-list.sidebar-nav
 				{{ #each users }}
-				<ChannelUser firstName="{{ firstName }}" lastName=" {{ lastName }}">
+				<RoomUser firstName="{{ firstName }}" lastName=" {{ lastName }}">
 				{{ /each }}
 
-	script#channel-user-template(type='text/ractive')
+	script#room-user-template(type='text/ractive')
 		li.user-information
 			div.user-metadata
 				a(href="#") 
 					i.fa.fa-circle(class="{{ status }}")
 					| {{ displayName }}
 
-	script#channel-messages-template(type='text/ractive')
+	script#room-messages-template(type='text/ractive')
 		div.scroll-wrapper
 			div.flexbox.chat-message-wrapper
 				div#chat-messages.flexitem.messages
@@ -49,15 +49,15 @@ block content
 						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(timestamp) }}") {{ formatTime(timestamp) }}
 					{{ /each }}
 		div#chat-input-area.flexitem.chat-input-container
-			form(action='/channels/1/messages' method='POST' on-submit="messageSubmit")
+			form(action='/rooms/1/messages' method='POST' on-submit="messageSubmit")
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ messageInput }}", on-keypress="typing" on-keydown-input="set('messageInput', event.node.value)")
 
-	script#channels-template(type='text/ractive')
+	script#rooms-template(type='text/ractive')
 		div#active-rooms.rooms-wrapper
 			ul#rooms-container.rooms-container.sidebar-nav
 				li.sidebar-heading 
 					strong Rooms
-				{{ #each channels }}
+				{{ #each rooms }}
 				li#room-name.room-name
-					a(href="#", class="{{ this === activeChannel ? 'active' : '' }}", on-click="load-channel:{{ . }}") {{ name }}
+					a(href="#", class="{{ this === activeRoom ? 'active' : '' }}", on-click="load-room:{{ . }}") {{ name }}
 				{{ /each}}

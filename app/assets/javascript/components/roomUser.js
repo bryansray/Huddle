@@ -1,11 +1,11 @@
 var Ractive = require('ractive');
 
-var ChannelUserComponent = Ractive.extend({
-	template: '#channel-user-template',
+var RoomUserComponent = Ractive.extend({
+	template: '#room-user-template',
 
 	oninit: function() { },
 
 	computed: { displayName: '${firstName} + " " + ${lastName}' }
 });
 
-module.exports = ChannelUserComponent;
+module.exports = RoomUserComponent;
