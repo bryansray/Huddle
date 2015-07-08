@@ -122,7 +122,7 @@ gulp.task('lint', ['lint:javascript', 'lint:stylesheets']);
 //  Test Tasks
 // *****************************************************************
 gulp.task("test:javascript", function() {
-	gulp.src('./app/tests/**/*_spec.js')
+	gulp.src('./tests/**/*_spec.js')
 		.pipe(mocha(config.mocha));
 });
 
