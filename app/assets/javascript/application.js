@@ -1,6 +1,8 @@
 var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash'),
+		io = require('socket.io-client'),
+		socket = io('http://localhost:3000'),
 		helpers = require('./helpers');
 
 var ChannelsComponent = require('./components/channels'),
@@ -20,7 +22,12 @@ var ChannelComponent = Ractive.extend({
 	},
 
 	activateChannel: function(event, channel) {
-		this.set('channel', channel);
+		var currentChannel = this.get('channel');
+		
+		if (currentChannel !== channel) {
+			this.set('channel', channel);
+			socket.emit('join', { userId: 1, channelId: channel._id });
+		}
 	}
 });
 
@@ -34,15 +41,14 @@ var huddle = new Ractive({
 	}
 });
 
-// var io = require('socket.io-client');
-// var socket = io('http://localhost:3000');
+socket.on('connect', function() {
+	console.log("connected");
+});
 
-// socket.connect('http://localhost:3000');
+socket.on('joined', function(user) {
+	console.log("joined: ", user);
+})
 
-// socket.on('connect', function() {
-// 	console.log("connected");
-// });
-
-// socket.on('error', function(data) {
-// 	console.log('error: ', data);
-// });
+socket.on('error', function(data) {
+	console.log('error: ', data);
+});
