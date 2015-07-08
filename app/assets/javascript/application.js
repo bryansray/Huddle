@@ -13,6 +13,14 @@ var ChannelComponent = Ractive.extend({
 	components: {
 		ChannelMessages: ChannelMessagesComponent,
 		ChannelUsers: ChannelUsersComponent
+	},
+
+	oninit: function() {
+		this.root.on('ChannelsList.load-channel', _.bind(this.activateChannel, this));
+	},
+
+	activateChannel: function(event, channel) {
+		this.set('channel', channel);
 	}
 });
 
@@ -20,24 +28,9 @@ var huddle = new Ractive({
 	el: '#huddle-app',
 	template: '#huddle-template',
 
-	oninit: function() {
-		this.on('ChannelsList.load-channel', this.activateChannel);
-	},
-
 	components: { 
 		Channel: ChannelComponent,
 		ChannelsList: ChannelsComponent,
-	},
-
-	activateChannel: function(event, channel) {
-		var activeChannel = this.get('activeChannel');
-
-		if (activeChannel !== channel) {
-			var url = '/channels/' + channel._id;
-			superagent.get(url, _.bind(function(data, response) {
-				this.set('activeChannel', channel);
-			}, this));
-		}
 	}
 });
 
