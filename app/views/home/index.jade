@@ -61,3 +61,7 @@ block content
 				li#room-name.room-name
 					a(href="#", class="{{ this === activeRoom ? 'active' : '' }}", on-click="load-room:{{ . }}") {{ name }}
 				{{ /each}}
+				li#new-room
+					a(href='#' on-click="newRoom") 
+						i.fa.fa-plus
+						|  New Room

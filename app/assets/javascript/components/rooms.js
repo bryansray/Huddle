@@ -13,10 +13,15 @@ var RoomsComponent = Ractive.extend({
 
 	oninit: function() { 
 		this.on('load-room', this.loadChannel);
+		this.on('newRoom', this.newRoom);
 	},
 
 	loadRoom: function(event, room) {
 		this.set('activeRoom', room);
+	},
+
+	newRoom: function(event) {
+		console.log("Create a new room ...");
 	}
 });
 
