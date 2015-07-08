@@ -7,4 +7,4 @@ exports.index = function(req, res) {
 	Room.findOne({ _id: roomId }, function(err, room) {
 		return res.json(room);
 	});
-}
+};

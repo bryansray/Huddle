@@ -47,7 +47,7 @@ socket.on('connect', function() {
 
 socket.on('joined', function(user) {
 	console.log("joined: ", user);
-})
+});
 
 socket.on('error', function(data) {
 	console.log('error: ', data);

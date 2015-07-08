@@ -8,7 +8,7 @@ helpers.timeAgoInWords = function(timestamp) {
 };
 
 helpers.formatTime = function(timestamp) {
-	return moment(timestamp).format("hh:mm A")
+	return moment(timestamp).format("hh:mm A");
 };
 
 helpers.humanizeTime = function(timestamp) {

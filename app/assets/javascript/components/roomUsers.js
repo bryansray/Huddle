@@ -18,7 +18,7 @@ var RoomUsersComponent = Ractive.extend({
 				{ userId: 4, firstName: "Lindsey", lastName: "Ray", status: "idle" },
 				{ userId: 4, firstName: "Kylie", lastName: "Ray", status: "offline" },
 			]
-		}
+		};
 	}
 });
 
