@@ -7,11 +7,7 @@ var ChannelMessagesComponent = Ractive.extend({
 
 	data: function() {
 		return { 
-			messages: [
-				// { messageId: 1, user: "Bryan Ray", text: "This is a message.", timestamp: new Date(2015, 6, 6, 10, 12, 28) },
-				// { messageId: 2, user: "Curtis Schlak", text: "This is another message for the channel.", timestamp: new Date(2015, 6, 6, 10, 22, 28, 0) },
-				// { messageId: 3, user: "Heather Wood", text: "I'm going to type something very long to make sure that it wraps across the screen. I want to make sure that I didn't break anything by putting it in to a javascript template.", timestamp: new Date(2015, 6, 6, 10, 32, 28, 0) },
-			],
+			messages: [],
 			messageInput: "" 
 		};
 	},
@@ -27,7 +23,7 @@ var ChannelMessagesComponent = Ractive.extend({
 		var url = "/channels/" + channel._id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
-			this.set('messages', response.body);
+			this.set('messages', response.body.messages);
 		}, this));
 	},
 
