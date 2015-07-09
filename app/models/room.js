@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema({
 	name: String,
 	description: String,
-	users: [mongoose.Schema.Types.ObjectId]
+	users: [mongoose.Schema.Types.ObjectId],
+	messages: []
 });
 
 schema.methods.addUser = function(user) {
@@ -20,7 +21,11 @@ schema.methods.removeUser = function(user) {
 		this.users.splice(index, 1);
 	
 	return this;
-}
+};
+
+schema.methods.addMessage = function(user, message) {
+	this.messages.push( { user: user, message: message });
+};
 
 var Room = mongoose.model('room', schema);
 
