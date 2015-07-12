@@ -43,8 +43,13 @@ block content
 			div.flexbox.chat-message-wrapper
 				div#chat-messages.flexitem.messages
 					{{ #each messages }}
-					div#chat-message-container.message-container.flexbox
-						div#chat-username.flexitem.username {{ user.displayName }}
+					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}")
+						div#chat-username.flexitem.username 
+							{{ #if from_user }}
+							{{ from_user.displayName }}
+							{{ else }}
+							{{ user.displayName }}
+							{{ /if }}
 						div#chat-message.flexitem.message {{ text }}
 						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(timestamp) }}") {{ formatTime(timestamp) }}
 					{{ /each }}
