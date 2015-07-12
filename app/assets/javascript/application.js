@@ -46,10 +46,6 @@ socket.on('connect', function() {
 	console.log("connected");
 });
 
-socket.on('joined', function(user) {
-	console.log("joined: ", user);
-});
-
 socket.on('error', function(data) {
 	console.log('error: ', data);
 });

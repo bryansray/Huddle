@@ -22,20 +22,12 @@ var RoomUsersComponent = Ractive.extend({
 
 	data: function() {
 		return { 
-			users: [
-				// { userId: 1, firstName: "Bryan", lastName: "Ray", status: "active" },
-				// { userId: 2, firstName: "Curtis", lastName: "Schlak", status: "active" },
-				// { userId: 3, firstName: "Heather", lastName: "Wood", status: "active" },
-				// { userId: 4, firstName: "Lindsey", lastName: "Ray", status: "idle" },
-				// { userId: 4, firstName: "Kylie", lastName: "Ray", status: "offline" },
-			]
+			users: []
 		};
 	},
 
 	joined: function(data) {
-		console.log("Someone joined the Room. :: ", data);
 		var users = this.get('users');
-
 		users.push(data.user);
 	}
 });
