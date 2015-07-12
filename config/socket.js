@@ -3,8 +3,6 @@ module.exports = function(server) {
 	var channels = {};
 
 	io.on('connection', function(socket) {
-		console.log("connected.");
-
 		// JOIN EVENT
 		socket.on('join', function(data) {
 			var user = { id: 1, firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray", status: "active" };
