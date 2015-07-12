@@ -6,7 +6,9 @@ module.exports = function(app) {
 	app.route('/').get(home.index);
 
 	// Rooms
-	app.route('/rooms').get(rooms.index);
+	app.route('/rooms')
+		.get(rooms.index)
+		.post(rooms.create);
 	app.route('/rooms/:id').get(rooms.show);
 
 	// Messages
