@@ -23,6 +23,8 @@ var RoomMessagesComponent = Ractive.extend({
 	},
 
 	getRoomMessages: function(event, room) {
+		if (this.get('messages').length > 0) return;
+
 		var url = "/rooms/" + room._id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
@@ -56,6 +58,8 @@ var RoomMessagesComponent = Ractive.extend({
 	messageEvent: function(data) {
 		var messages = this.get('messages');
 		messages.push(data);
+		var messagesElement = document.getElementById('chat-messages');
+		messagesElement.scrollTop = messagesElement.scrollHeight;
 	}
 });
 
