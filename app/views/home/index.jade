@@ -44,7 +44,7 @@ block content
 				div#chat-messages.flexitem.messages
 					{{ #each messages }}
 					div#chat-message-container.message-container.flexbox
-						div#chat-username.flexitem.username {{ user }}
+						div#chat-username.flexitem.username {{ user.displayName }}
 						div#chat-message.flexitem.message {{ text }}
 						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(timestamp) }}") {{ formatTime(timestamp) }}
 					{{ /each }}
@@ -59,7 +59,7 @@ block content
 					strong Rooms
 				{{ #each rooms }}
 				li#room-name.room-name
-					a(href="#", class="{{ this === activeRoom ? 'active' : '' }}", on-click="load-room:{{ . }}") {{ name }}
+					a(href="#", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadRoom:{{ . }}") {{ name }}
 				{{ /each}}
 				li#new-room
 					a(href='#' on-click="newRoom") 

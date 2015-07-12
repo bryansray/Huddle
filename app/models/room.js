@@ -24,7 +24,7 @@ schema.methods.removeUser = function(user) {
 };
 
 schema.methods.addMessage = function(user, message) {
-	this.messages.push( { user: user, message: message });
+	this.messages[message.id] = { user: user, message: message };
 };
 
 var Room = mongoose.model('room', schema);

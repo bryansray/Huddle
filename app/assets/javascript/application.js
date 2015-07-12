@@ -18,7 +18,7 @@ var RoomComponent = Ractive.extend({
 	},
 
 	oninit: function() {
-		this.root.on('RoomList.load-room', _.bind(this.activateRoom, this));
+		this.root.on('RoomList.loadRoom', _.bind(this.activateRoom, this));
 	},
 
 	activateRoom: function(event, room) {
@@ -34,7 +34,8 @@ var RoomComponent = Ractive.extend({
 var huddle = new Ractive({
 	el: '#huddle-app',
 	template: '#huddle-template',
-
+	socket: socket,
+	
 	components: { 
 		Room: RoomComponent,
 		RoomList: RoomsComponent,

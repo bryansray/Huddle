@@ -12,7 +12,7 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	oninit: function() { 
-		this.on('load-room', this.loadChannel);
+		this.on('loadRoom', this.loadRoom);
 		this.on('newRoom', this.newRoom);
 	},
 
@@ -21,7 +21,11 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	newRoom: function(event) {
-		console.log("Create a new room ...");
+		superagent.post('/rooms')
+			.send({ name: "General Discussion", description: "This is a room for General Discussion." })
+			.end(function(res) {
+				console.log(arguments);
+			});
 	}
 });
 

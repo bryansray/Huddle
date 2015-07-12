@@ -7,22 +7,17 @@ module.exports = function(server) {
 
 		// JOIN EVENT
 		socket.on('join', function(data) {
-			console.log("joined: ", data);
+			var user = { id: 1, firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray", status: "active" };
+			var room = { id: data.roomId };
 
-			var channel = channels[data.channelId];
-
-			// TODO : This needs to be much more robust (consider redis)
-			if (!channel) {
-				channel = { users: [] };
-				channels[data.channelId] = channel;
-			}
-
-			if (!channel.users.includes(data.userId)) {
-				channel.users.push(data.userId);
-				io.emit("joined", { user: data.userId });
-			}
-
-			console.log(channels);
+			var joinedEventData = { 
+				user: user, 
+				room: room, 
+				text: 'Someone joined the Room.',
+				timestamp: new Date()
+			};
+			socket.join(data.roomId);
+			socket.to(data.roomId).emit('joined', joinedEventData);
 		});
 	});
 };
