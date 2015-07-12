@@ -4,7 +4,9 @@
 
 $grey: #cecece;
 
-html,body { height: 100%; }
+html,
+body { height: 100%; }
+
 .chat-message-wrapper { height: 400px; }
 
 body {
@@ -28,9 +30,9 @@ body {
 }
 
 .sidebar-left {
+  background-color: #f5f5f5;
   border-right: 1px solid $grey;
   min-width: 150px;
-  background-color: #f5f5f5;
 }
 
 .scroll-wrapper {
@@ -46,39 +48,42 @@ body {
 }
 
 .messages {
-  background-color: #fff !important;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: absolute;
-  top: 0;
+  // background-color: #fff !important;
   bottom: 0;
   left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: absolute;
   right: 0;
+  top: 0;
+}
 
-  .message-container {
-    border-bottom: 1px solid $grey;
-    margin: 0;
-    padding: .4rem 0;
+.message-container {
+  border-bottom: 1px solid $grey;
+  margin: 0;
+  padding: .4rem 0;
 
-    &:last-child { border-bottom: 0; }
+  &:last-child { border-bottom: 0; }
 
-    &.server-message {
-      background-color: #B1D1FA;
+  &.server-message {
+    background-color: #b1d1fa;
 
-      .username, .message, .timestamp { color: #515151; }
-    }
+    .username, 
+    .message, 
+    .timestamp { color: #515151; }
+  }
 
-    .username { color: #707070; padding-right: 2rem; text-align: right; width: 110px; }
-    .message { 
-      line-height: 1.4rem; 
-      color: #515151; 
-    }
-    .timestamp { 
-      color: #999; 
-      padding: 0 .5rem; 
-      text-align: right; 
-      // width: 80px;
-    }
+  .username { color: #707070; padding-right: 2rem; text-align: right; width: 110px; }
+  .message { 
+    color: #515151;
+    line-height: 1.4rem;
+  }
+
+  .timestamp { 
+    color: #999; 
+    padding: 0 .5rem; 
+    text-align: right; 
+    // width: 80px;
   }
 }
 
@@ -161,7 +166,7 @@ body {
   color: #d8d8d8;
 }
 
-ul.sidebar-nav {
+.sidebar-nav {
   list-style-image: none;
   list-style-type: none;
   margin: 0;
@@ -170,19 +175,19 @@ ul.sidebar-nav {
   > li {
     list-style: none;
     margin: 0;
+  }
 
-    a {
-      display: block;
-      line-height: 1.1rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      word-wrap: break-word;
+  a {
+    display: block;
+    line-height: 1.1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
 
-      &.active {
-        color: white;
-        background-color: #2472ad;
-      }
+    &.active {
+      background-color: #2472ad;
+      color: #fff;
     }
   }
 }
@@ -202,8 +207,8 @@ ul.sidebar-nav {
 .room-header {
   background-color: #f5f5f5;
   border-bottom: 1px solid $grey;
-  max-height: 70px;
   box-sizing: border-box;
+  max-height: 70px;
   padding: 10px;
 
   .room-header-inner {
@@ -215,6 +220,11 @@ a {
   text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
   margin: 0;
 }
