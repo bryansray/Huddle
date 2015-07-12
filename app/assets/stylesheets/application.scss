@@ -57,10 +57,16 @@ body {
 
   .message-container {
     border-bottom: 1px solid $grey;
-    margin: .4rem 0;
+    margin: 0;
     padding: .4rem 0;
 
     &:last-child { border-bottom: 0; }
+
+    &.server-message {
+      background-color: #B1D1FA;
+
+      .username, .message, .timestamp { color: #515151; }
+    }
 
     .username { color: #707070; padding-right: 2rem; text-align: right; width: 110px; }
     .message { 
