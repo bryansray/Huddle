@@ -2,7 +2,6 @@ var Room = require('../models/room');
 
 exports.index = function(req, res) {
 	Room.Model.find(function(err, rooms) {
-		console.log(err, rooms);
 		return res.json(rooms);
 	});
 };
@@ -17,8 +16,6 @@ exports.show = function(req, res) {
 
 exports.create = function(req, res) {
 	Room.Model.create(req.body, function(err, room) {
-		console.log(arguments);
-
 		return res.json(room);
 	});
 	// var room = new Room.Model({ name: name, description: description });
