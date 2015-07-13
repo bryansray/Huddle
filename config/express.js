@@ -10,9 +10,11 @@ var cookieParser = require('cookie-parser'),
 		session = require('express-session'),
 		bodyParser = require('body-parser'),
 		flash = require('connect-flash'),
-		helmet = require('helmet');
+		helmet = require('helmet'),
+		MongoStore = require('connect-mongo')(session);
 
 module.exports = function(db) {
+	var passport = require('passport');
 	var app = express();
 
 	// find models
@@ -35,7 +37,7 @@ module.exports = function(db) {
 	app.set('showStackError');
 
 	// uncomment after placing your favicon in /public
-	//app.use(favicon(__dirname + '/public/favicon.ico'));
+	app.use(favicon('public/favicon.ico'));
 	app.use(logger('dev'));
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,10 +61,21 @@ module.exports = function(db) {
 
 	app.use(cookieParser());
 	app.use(flash());
+	app.use(session({
+		secret: config.session.key,
+		resave: false,
+		saveUninitialized: false,
+		cookie: { secure: false },
+		store: new MongoStore({ mongooseConnection: db.connection })
+	}));
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	var passport = require('./passport')(app, config, passport);
 
 	// find routes
 	globule.find('./app/routes/**/*.js').forEach(function(route) {
-		require(path.resolve(route))(app);
+		require(path.resolve(route))(app, passport);
 	});
 
 	return app;
