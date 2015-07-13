@@ -50,7 +50,7 @@ block content
 							{{ else }}
 							{{ user.displayName }}
 							{{ /if }}
-						div#chat-message.flexitem.message {{ text }}
+						div#chat-message.flexitem.message {{{ html }}}
 						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(timestamp) }}") {{ formatTime(timestamp) }}
 					{{ /each }}
 		div#chat-input-area.flexitem.chat-input-container
