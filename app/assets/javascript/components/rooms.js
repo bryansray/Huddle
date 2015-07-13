@@ -2,6 +2,14 @@ var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash');
 
+var NewRoomComponent = Ractive.extend({
+	template: '#new-room-template',
+
+	oninit: function() {
+		console.log("Initializing NewRoomComponent ...");
+	}
+});
+
 var RoomsComponent = Ractive.extend({
 	template: '#rooms-template',
 
@@ -21,11 +29,10 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	newRoom: function(event) {
-		superagent.post('/rooms')
-			.send({ name: "General Discussion", description: "This is a room for General Discussion." })
-			.end(function(res) {
-				console.log(arguments);
-			});
+		var newRoom = NewRoomComponent({
+			el: '#huddle-app',
+			append: true
+		});
 	}
 });
 
