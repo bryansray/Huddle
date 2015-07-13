@@ -3,6 +3,7 @@
 @import 'font-awesome';
 
 $grey: #cecece;
+$white: #fff;
 
 html,
 body { height: 100%; }
@@ -48,7 +49,6 @@ body {
 }
 
 .messages {
-  // background-color: #fff !important;
   bottom: 0;
   left: 0;
   overflow-x: hidden;
@@ -73,6 +73,14 @@ body {
     .timestamp { color: #515151; }
   }
 
+  &.low { background-color: #fffed7; }
+  &.medium { background-color: #fff7dd; }
+  &.high { 
+    background-color: #fff2f2; 
+
+    .message { color: #d51b1b; font-weight: bold; }
+  }
+
   .username { color: #707070; padding-right: 2rem; text-align: right; width: 110px; }
   .message { 
     color: #515151;
@@ -87,6 +95,15 @@ body {
   }
 
   p { margin: 0; }
+}
+
+.hash-tag {
+  background-color: #f0f8ff;
+  border: 1px solid #cecece;
+  border-radius: 3px;
+  // color: #949494;
+  font-size: smaller;
+  padding: 0 10px;
 }
 
 .chat-input-container {
@@ -189,7 +206,7 @@ body {
 
     &.active {
       background-color: #2472ad;
-      color: #fff;
+      color: $white;
     }
   }
 }
