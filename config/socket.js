@@ -1,6 +1,8 @@
+var Room = require('../app/models/room');
+
 module.exports = function(server) {
-	var io = require('socket.io')(server);
-	var channels = {};
+	var io = require('socket.io')(server),
+			markdown = require('markdown').markdown;
 
 	io.on('connection', function(socket) {
 		// JOIN EVENT
@@ -12,29 +14,31 @@ module.exports = function(server) {
 				from_user: { displayName: "Huddle" },
 				user: user, 
 				room: room, 
-				text: `${user.firstName} ${user.lastName} joined the Room.`,
+				message: `*** ${user.firstName} ${user.lastName} joined the Room.`,
+				html: `*** ${user.firstName} ${user.lastName} joined the Room.`,
 				timestamp: new Date()
 			};
 			socket.join(data.roomId);
 			socket.to(data.roomId).emit('joined', joinedEventData);
 		});
 
-		// MESSAGE EVENT
+		// MESSAGE (RECEIVED) EVENT
 		socket.on('message', function(data) {
 			var message = data.message,
 					userId = data.userId,
-					roomId = data.roomId;
+					roomId = data.roomId,
+					html = markdown.toHTML(message, 'Maruku'),
+					timestamp = new Date();
 
-			var user = { firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray" },
-					channel = {};
+			var user = { firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray" };
+			var message = { user: user, message: message, html: html, timestamp: timestamp };
 
-			var messageEventData = {
-				user: user,
-				text: message,
-				timestamp: new Date()
-			};
+			Room.Model.findById(roomId, function(err, room) {
+				room.messages.push(message)
+				room.save();
+			});
 
-			io.sockets.in(roomId).emit('message', messageEventData);
+			io.sockets.in(roomId).emit('message', message);
 		});
 	});
 };
