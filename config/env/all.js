@@ -5,5 +5,10 @@ module.exports = {
 		keywords: ""
 	},
 
-	port: process.env.PORT || 3000
+	port: process.env.PORT || 3000,
+	
+	session: {
+		key: "huddle_secret",
+		options: {}
+	}
 };
