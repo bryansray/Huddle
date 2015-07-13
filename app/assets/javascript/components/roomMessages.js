@@ -55,11 +55,15 @@ var RoomMessagesComponent = Ractive.extend({
 		messages.push(data);
 	},
 
+	scrollToTop: function() {
+		var messagesElement = document.getElementById('chat-messages');
+		messagesElement.scrollTop = messagesElement.scrollHeight;
+	},
+
 	messageEvent: function(data) {
 		var messages = this.get('messages');
 		messages.push(data);
-		var messagesElement = document.getElementById('chat-messages');
-		messagesElement.scrollTop = messagesElement.scrollHeight;
+		this.scrollToTop();
 	}
 });
 
