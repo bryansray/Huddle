@@ -4,7 +4,7 @@ block content
 	div#huddle-app
 
 	script#huddle-template(type='text/ractive')
-		div#huddle-app.flexbox.huddle-container
+		div#huddle-app-container.flexbox.huddle-container
 			div#left-sidebar.flexitem.sidebar.sidebar-left
 				<RoomList>
 
@@ -43,7 +43,7 @@ block content
 			div.flexbox.chat-message-wrapper
 				div#chat-messages.flexitem.messages
 					{{ #each messages }}
-					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}")
+					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }} {{ tags.join(' ') }}")
 						div#chat-username.flexitem.username 
 							{{ #if from_user }}
 							{{ from_user.displayName }}
@@ -56,6 +56,19 @@ block content
 		div#chat-input-area.flexitem.chat-input-container
 			form(action='/rooms/1/messages' method='POST' on-submit="messageSubmit")
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ messageInput }}", on-keypress="typing" on-keydown-input="set('messageInput', event.node.value)")
+
+	script#new-room-template(type='text/ractive')
+		div#new-room-container
+			h4 Create a New Room
+
+			form(action="/rooms" method="POST")
+				div.form-group
+					label(for="name") Name
+					input(type="text" placeholder="")
+				div.form-group
+					label(for="description") Description
+					input(type="text")
+				button(type="submit") Create Room
 
 	script#rooms-template(type='text/ractive')
 		div#active-rooms.rooms-wrapper
