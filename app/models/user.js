@@ -8,7 +8,18 @@ var schema = new Schema({
 	displayName: String,
 	email: String,
 	salt: String,
-	password: String
+	password: String,
+
+	roles: {
+		type: [ { type: String, enum: ['User', 'Administrator'] } ],
+		default: ['User']
+	},
+
+	resetPasswordToken: String,
+	resetPasswordExpires: Date,
+
+	updated_at: Date,
+	created_at: { type: Date, default: Date.now }
 });
 
 schema.pre('save', function(next) {
