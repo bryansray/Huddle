@@ -8,7 +8,11 @@ module.exports = {
 	port: process.env.PORT || 3000,
 	
 	session: {
-		key: "huddle_secret",
-		options: {}
+		options: {
+			secret: "huddle_secret",
+			resave: false,
+			saveUninitialized: false,
+			cookie: { secure: false }
+		}
 	}
 };

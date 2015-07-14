@@ -4,6 +4,7 @@ var globule = require('globule'),
 
 var path = require('path');
 var logger = require('morgan');
+var _ = require('lodash');
 
 var cookieParser = require('cookie-parser'),
 		favicon = require('serve-favicon'),
@@ -21,6 +22,10 @@ module.exports = function(db) {
 	globule.find('./app/models/**/*.js').forEach(function(model) {
 		require(path.resolve(model));
 	});
+
+	// var User = require('../app/models/user');
+	// var bryan = new User.Model({ email: "bryan@bryanray.net", firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray", password: "testing" });
+	// bryan.save();
 
 	// Application local variables (Title, Description?, Keywords?)
 	app.locals.title = config.app.title;
@@ -61,13 +66,11 @@ module.exports = function(db) {
 
 	app.use(cookieParser());
 	app.use(flash());
-	app.use(session({
-		secret: config.session.key,
-		resave: false,
-		saveUninitialized: false,
-		cookie: { secure: false },
-		store: new MongoStore({ mongooseConnection: db.connection })
-	}));
+
+	var mongoStore = new MongoStore({ mongooseConnection: db.connection }),
+			sessionConfig = _.defaults(config.session.options, { store: mongoStore } );
+
+	app.use(session(sessionConfig));
 	app.use(passport.initialize());
 	app.use(passport.session());
 
