@@ -10,7 +10,7 @@ exports.show = function(req, res) {
 	var roomId = req.params.id;
 
 	Room.Model.findOne({ _id: roomId }, function(err, room) {
-		return res.json(room);
+		return req.xhr ? res.json(room) : res.render('home/index', { room: room });
 	});
 };
 
