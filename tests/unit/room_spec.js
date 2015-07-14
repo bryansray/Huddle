@@ -53,7 +53,7 @@ describe("Room", function() {
 	});
 
 	describe("message management", function() {
-		it("should be able to add a message to the channel", function() {
+		it.skip("should be able to add a message to the channel", function() {
 			var room = new Room.Model(),
 					user = new User.Model(),
 					message = new Message.Model();
