@@ -1,5 +1,6 @@
 var home = require('../controllers/home'),
 		rooms = require('../controllers/rooms'),
+		users = require('../controllers/users'),
 		messages = require('../controllers/messages'),
 		sessions = require('../controllers/sessions');
 
@@ -21,6 +22,10 @@ module.exports = function(app, passport) {
 		.post(passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
 	app.route('/logout').get(sessions.delete);
+
+	// Users
+	app.route('/users').post(users.create);
+	app.route('/users/new').get(users.new);
 
 	// Rooms
 	app.route('/rooms')

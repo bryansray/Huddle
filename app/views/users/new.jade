@@ -1,0 +1,22 @@
+extends ../shared/layouts/application
+
+block content
+	h4 Create a New Account
+
+	form(action='/users', method='POST')
+		div.form-group
+			label First Name
+			input(type='text' name='firstName')
+		div.form-group
+			label Last Name
+			input(type='text' name='lastName')
+		div.form-group
+			label Display Name
+			input(type='text' name='displayName')
+		div.form-group
+			label Email
+			input(type='text' name='email')
+		div.form-group
+			label Password
+			input(type='password' name='password')
+		button(type='submit') Create Account
