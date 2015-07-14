@@ -1,12 +1,16 @@
-h4 Login
+extends ../shared/layouts/application
 
-form(action='/login' method='POST')
-	div.form-group
-		label Email
-		input(type='text' name='email')
+block content
+	div#login-template.container.login
+		h4 Huddle Login
 
-	div.form-group
-		label Password
-		input(type='password', name='password')
+		form(action='/login' method='POST')
+			div.form-group
+				label Email
+				input(type='text' name='email' placeholder='you@gmail.com')
 
-	button(type='submit') Login
+			div.form-group
+				label Password
+				input(type='password', name='password')
+
+			button(type='submit') Login

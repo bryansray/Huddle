@@ -247,3 +247,30 @@ h5,
 h6 {
   margin: 0;
 }
+
+
+// LOGIN
+.login.container {
+  background-color: #f9f9f9;
+  border: 1px solid #ababab;
+  border-radius: 10px;
+  box-shadow: 3px 3px #cecece;
+  margin: 5rem auto;
+  padding: 1rem;
+  width: 260px;  
+}
+
+
+.form-group {
+  margin: .4rem 0;
+  line-height: 1.4rem;
+}
+
+.login {
+  label {
+    width: 25%;
+    display: inline-block;
+  }
+
+  input { width: 70%; }
+}
