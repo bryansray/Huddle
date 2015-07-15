@@ -7,10 +7,15 @@ block content
 		form(action='/login' method='POST')
 			div.form-group
 				label Email
-				input(type='text' name='email' placeholder='you@gmail.com')
+				input(type='text' name='email' autofocus="true")
 
 			div.form-group
 				label Password
 				input(type='password', name='password')
 
-			button(type='submit') Login
+			div.text-right
+				button(type='submit') Login
+
+		div.container.new-user
+			h5
+				a(href='/users/new') Create a New Account
