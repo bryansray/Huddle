@@ -250,7 +250,15 @@ h6 {
 
 
 // LOGIN
-.login.container {
+.text-right {
+  text-align: right;
+}
+
+.new-user {
+  margin-top: 1rem;
+}
+
+.login {
   background-color: #f9f9f9;
   border: 1px solid #ababab;
   border-radius: 10px;
@@ -258,6 +266,14 @@ h6 {
   margin: 5rem auto;
   padding: 1rem;
   width: 260px;  
+
+  button {
+    background-color: rgb(236, 236, 236);
+    border-radius: 7px;
+    border: 1px solid #545454;
+    color: rgb(84, 84, 84);
+    padding: .2rem 1.1rem;
+  }
 }
 
 
