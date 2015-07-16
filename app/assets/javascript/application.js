@@ -2,8 +2,10 @@ var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash'),
 		io = require('socket.io-client'),
-		socket = io('http://localhost:3000'),
+		// socket = io('http://localhost:3000', { query: "userId=1234" }),
 		helpers = require('./helpers');
+
+var socket = io.connect('http://localhost:3000', { query: "userId=34567" });
 
 var RoomsComponent = require('./components/rooms'),
 		RoomMessagesComponent = require('./components/roomMessages'),
@@ -26,7 +28,7 @@ var RoomComponent = Ractive.extend({
 		
 		if (currentRoom !== room) {
 			this.set('room', room);
-			socket.emit('join', { userId: 1, roomId: room._id });
+			socket.emit('join', { roomId: room._id });
 		}
 	}
 });
