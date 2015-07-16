@@ -80,7 +80,7 @@ block content
 					strong Rooms
 				{{ #each rooms }}
 				li#room-name.room-name
-					a(href="/rooms/{{ _id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadRoom:{{ . }}") {{ name }}
+					a(href="#/rooms/{{ _id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadRoom:{{ . }}") {{ name }}
 				{{ /each}}
 				li#new-room
 					a(href='#' on-click="newRoom") 
