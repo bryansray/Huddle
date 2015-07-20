@@ -9,6 +9,11 @@ module.exports = function(server) {
 	io.on('connection', function(socket) {
 		// JOIN EVENT
 		socket.on('join', function(data) {
+			var userIds = io.sockets.sockets.map(function(x) { return x.handshake.query.userId });
+			var currentUserId = socket.handshake.query.userId;
+
+			// TODO : This user already exists ... do we need to do anything else?
+
 			var user = { id: 1, firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray", status: "active" };
 			var room = { id: data.roomId };
 
@@ -22,6 +27,7 @@ module.exports = function(server) {
 				html: markdown.toHTML(message),
 				timestamp: new Date()
 			};
+
 			socket.join(data.roomId);
 			socket.to(data.roomId).emit('joined', joinedEventData);
 		});
