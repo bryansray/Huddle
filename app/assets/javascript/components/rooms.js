@@ -14,6 +14,7 @@ var RoomsComponent = Ractive.extend({
 	template: '#rooms-template',
 
 	onconstruct: function() {
+		console.log("constructing RoomsComponent.");
 		superagent.get('/rooms', _.bind(function(data, response) {
 			this.set('rooms', response.body);
 			this.set('activeRoom', response.body[0]);
@@ -21,8 +22,13 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	oninit: function() { 
+		console.log("Initializing RoomsComponent.");
 		this.on('loadRoom', this.loadRoom);
 		this.on('newRoom', this.newRoom);
+	},
+
+	oncomplete: function() {
+		console.log("Completing RoomsComponent.");
 	},
 
 	loadRoom: function(event, room) {

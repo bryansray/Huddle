@@ -34,15 +34,16 @@ var huddle = new Ractive({
 	},
 
 	oninit: function() {
-		// this.on('RoomList.loadRoom', this.activateRoom);
-		RoomsComponent().observe('activeRoom', function(room) {
-			if (!room) return;
-			this.set('activeRoom', room);
-			socket.emit('join', { roomId: room.id });
-		}, { context: this });
+		console.log("Initializing Huddle ...");
 	},
 
-	activateRoom: function(event, room) {
+	oncomplete: function() {
+		console.log("Huddle Complete ...");
+		var component = this.findComponent('RoomList');
+		component.observe('activeRoom', this.activateRoom, { context: this });
+	},
+
+	activateRoom: function(room, oldRoom, keypath) {
 		var currentRoom = this.get('activeRoom');
 		
 		if (currentRoom !== room) {
