@@ -34,7 +34,12 @@ var huddle = new Ractive({
 	},
 
 	oninit: function() {
-		this.on('RoomList.loadRoom', this.activateRoom);
+		// this.on('RoomList.loadRoom', this.activateRoom);
+		RoomsComponent().observe('activeRoom', function(room) {
+			if (!room) return;
+			this.set('activeRoom', room);
+			socket.emit('join', { roomId: room.id });
+		}, { context: this });
 	},
 
 	activateRoom: function(event, room) {

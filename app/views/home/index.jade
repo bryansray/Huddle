@@ -19,8 +19,8 @@ block content
 			div.room-header-inner
 				//- i.fa.fa-lock.fa-2x
 				div.page-header-main
-					h3 {{ room.name }}
-					p {{ room.description }}
+					h3 {{ activeRoom.name }}
+					p {{ activeRoom.description }}
 		section#room-container.flexbox.room-container
 			div#chat-message-area.flexitem.chat-message-area
 				<RoomMessages>
@@ -80,7 +80,7 @@ block content
 					strong Rooms
 				{{ #each rooms }}
 				li#room-name.room-name
-					a(href="#/rooms/{{ id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadRoom:{{ . }}") {{ name }}
+					a(href="/rooms/{{ id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadRoom:{{ . }}") {{ name }}
 				{{ /each}}
 				li#new-room
 					a(href='#' on-click="newRoom") 
