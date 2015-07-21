@@ -16,7 +16,6 @@ var RoomsComponent = Ractive.extend({
 	onconstruct: function() {
 		superagent.get('/rooms', _.bind(function(data, response) {
 			this.set('rooms', response.body);
-			// this.loadRoom(null, response.body[0]);
 		}, this));
 	},
 
@@ -26,7 +25,6 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	loadRoom: function(event, room) {
-		console.log("event; ", event);
 		this.set('activeRoom', room);
 	},
 

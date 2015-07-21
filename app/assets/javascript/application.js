@@ -20,16 +20,6 @@ var RoomComponent = Ractive.extend({
 	},
 
 	oninit: function() {
-		this.root.on('RoomList.loadRoom', _.bind(this.activateRoom, this));
-	},
-
-	activateRoom: function(event, room) {
-		var currentRoom = this.get('room');
-		
-		if (currentRoom !== room) {
-			this.set('room', room);
-			socket.emit('join', { roomId: room.id });
-		}
 	}
 });
 
@@ -37,15 +27,27 @@ var huddle = new Ractive({
 	el: '#huddle-app',
 	template: '#huddle-template',
 	socket: socket,
-	
+
 	components: { 
 		Room: RoomComponent,
 		RoomList: RoomsComponent,
-	}
+	},
+
+	oninit: function() {
+		this.on('RoomList.loadRoom', this.activateRoom);
+	},
+
+	activateRoom: function(event, room) {
+		var currentRoom = this.get('activeRoom');
+		
+		if (currentRoom !== room) {
+			this.set('activeRoom', room);
+			socket.emit('join', { roomId: room.id });
+		}
+	},
 });
 
 socket.on('connect', function() {
-	console.log("connected");
 });
 
 socket.on('error', function(data) {
