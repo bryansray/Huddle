@@ -3,6 +3,8 @@ var Bookshelf = require('../../config/bookshelf');
 var Message = Bookshelf.Model.extend({
 	tableName: 'messages',
 
+	hasTimestamps: true,
+
 	initialize: function() { 
 		console.log("Initializing Message ...");
 	},
