@@ -10,7 +10,7 @@ exports.show = function(req, res) {
 	var roomId = req.params.id;
 
 	new Room({ id: roomId }).fetch().then(function(room) {
-		return req.xhr ? res.json(room) : res.render('home/index', { room: room });
+		return req.xhr ? res.json(room) : res.render('home/index', { room: room, title: room.get('name') });
 	});
 };
 
