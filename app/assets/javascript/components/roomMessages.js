@@ -25,7 +25,7 @@ var RoomMessagesComponent = Ractive.extend({
 	getRoomMessages: function(event, room) {
 		if (this.get('messages').length > 0) return;
 
-		var url = "/rooms/" + room._id + "/messages";
+		var url = "/rooms/" + room.id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
 			this.set('messages', response.body[0].messages);
@@ -35,7 +35,7 @@ var RoomMessagesComponent = Ractive.extend({
 	messageSubmit: function() {
 		var message = this.get('messageInput'),
 				room = this.parent.get('room');
-		this.root.socket.emit('message', { userId: 1, roomId: room._id, message: message });
+		this.root.socket.emit('message', { userId: 1, roomId: room.id, message: message });
 	},
 
 	handleTyping: function(event) {
@@ -61,6 +61,7 @@ var RoomMessagesComponent = Ractive.extend({
 	},
 
 	messageEvent: function(data) {
+		console.log("messageEvent: ", data)
 		var messages = this.get('messages');
 		messages.push(data);
 		this.scrollToTop();

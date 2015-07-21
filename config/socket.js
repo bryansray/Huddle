@@ -1,6 +1,5 @@
-var Room = require('../app/models/room');
-
-
+var Room = require('../app/models/room'),
+		Message = require('../app/models/message');
 
 module.exports = function(server) {
 	var io = require('socket.io')(server),
@@ -47,14 +46,19 @@ module.exports = function(server) {
 			if (tags) tags = tags.map(function(tag) { return tag.replace(/ /g, '').replace( /#/, ''); })
 
 			var user = { firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray" };
-			var message = { user: user, message: message, html: html, tags: tags, timestamp: timestamp };
+			// var message = { user: user, original: message, html: html, tags: tags, timestamp: timestamp };
+			var message = { user_id: 8, room_id: roomId, original: message, html: html };
 
-			Room.Model.findById(roomId, function(err, room) {
-				room.messages.push(message)
-				room.save();
-			});
-
-			io.sockets.in(roomId).emit('message', message);
+			Message.forge(message).save().then(function(model) {
+				model.set('user', user);
+				console.log(model.toJSON());
+				io.sockets.in(roomId).emit('message', model.toJSON());
+			}).catch(function(err) { console.log(err); });
+			// new Room({ id: roomId }).fetch({ withRelated: ['messages'] }).then(function(room) {
+			// 	console.log("Room found: ", room);
+			// 	room.messages.push(message)
+			// 	room.save();
+			// });
 		});
 	});
 };

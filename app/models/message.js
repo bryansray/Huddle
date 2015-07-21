@@ -1,12 +1,19 @@
-var mongoose = require('mongoose');
+var Bookshelf = require('../../config/bookshelf');
 
-var schema = mongoose.Schema({
-	text: String
+var Message = Bookshelf.Model.extend({
+	tableName: 'messages',
+
+	initialize: function() { 
+		console.log("Initializing Message ...");
+	},
+
+	user: function() {
+		return this.belongsTo('User');
+	},
+
+	room: function() {
+		return this.belongTo('Room');
+	}
 });
 
-var Message = mongoose.model('message', schema);
-
-module.exports = {
-	Schema: schema,
-	Model: Message,
-};
+module.exports = Bookshelf.model('Message', Message);

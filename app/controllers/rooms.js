@@ -1,7 +1,7 @@
 var Room = require('../models/room');
 
 exports.index = function(req, res) {
-	Room.Model.find(function(err, rooms) {
+	Room.fetchAll({ withRelated: ['messages'] }).then(function(rooms) {
 		return res.json(rooms);
 	});
 };
@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
 	var roomId = req.params.id;
 
-	Room.Model.findOne({ _id: roomId }, function(err, room) {
+	new Room({ id: roomId }).fetch().then(function(room) {
 		return req.xhr ? res.json(room) : res.render('home/index', { room: room });
 	});
 };

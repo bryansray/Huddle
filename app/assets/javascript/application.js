@@ -28,7 +28,7 @@ var RoomComponent = Ractive.extend({
 		
 		if (currentRoom !== room) {
 			this.set('room', room);
-			socket.emit('join', { roomId: room._id });
+			socket.emit('join', { roomId: room.id });
 		}
 	}
 });

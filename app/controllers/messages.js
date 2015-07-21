@@ -1,12 +1,11 @@
-var mongoose = require('mongoose'),
-		Room = mongoose.model('room');
+var Room = require('../models/room');
 
 exports.index = function(req, res) {
 	var roomId = req.params.roomId;
 
-	Room.Model.findOne({ _id: roomId }, function(err, room) {
-		return res.json(room);
-	});
+	// Room.Model.findOne({ _id: roomId }, function(err, room) {
+	// 	return res.json(room);
+	// });
 };
 
 exports.create = function(req, res) {

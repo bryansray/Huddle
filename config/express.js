@@ -1,7 +1,7 @@
 var globule = require('globule'),
 		config = require('./config'),
 		express = require('express');
-
+		
 var path = require('path');
 var logger = require('morgan');
 var _ = require('lodash');
@@ -11,8 +11,15 @@ var cookieParser = require('cookie-parser'),
 		session = require('express-session'),
 		bodyParser = require('body-parser'),
 		flash = require('connect-flash'),
-		helmet = require('helmet'),
-		MongoStore = require('connect-mongo')(session);
+		helmet = require('helmet');
+
+var middleware = {
+	locals: function(req, res, next) {
+		console.log(req);
+		// req.locals({ user: req.user });
+		next();
+	}
+}
 
 module.exports = function(db) {
 	var passport = require('passport');
@@ -24,12 +31,12 @@ module.exports = function(db) {
 	});
 
 	// var User = require('../app/models/user');
-	// var bryan = new User.Model({ email: "bryan@bryanray.net", firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray", password: "testing" });
+	// var bryan = new User({ email: "bryan@bryanray.net", firstName: "Bryan", lastName: "Ray", displayName: "Bryan Ray", password: "testing" });
 	// bryan.save();
 
 	// Application local variables (Title, Description?, Keywords?)
 	app.locals.title = config.app.title;
-
+		
 	// Pass the request url to the environment locals
 	app.use(function(req, res, next) {
 		res.locals.url = req.protocol + "://" + req.headers.host + req.url;
@@ -41,7 +48,6 @@ module.exports = function(db) {
 	// Show stack errors
 	app.set('showStackError');
 
-	// uncomment after placing your favicon in /public
 	app.use(favicon('public/favicon.ico'));
 	app.use(logger('dev'));
 	app.use(bodyParser.json());
@@ -67,14 +73,23 @@ module.exports = function(db) {
 	app.use(cookieParser());
 	app.use(flash());
 
-	var mongoStore = new MongoStore({ mongooseConnection: db.connection }),
-			sessionConfig = _.defaults(config.session.options, { store: mongoStore } );
+	var pgSession = require('connect-pg-simple')(session);
 
-	app.use(session(sessionConfig));
+	app.use(session({
+		store: new pgSession({
+			conString: {
+				database: 'huddle'
+			}
+		}),
+		secret: "huddle_key",
+		cookie: { secure: false },
+		resave: false,
+		saveUninitialized: false,
+	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
 
-	var passport = require('./passport')(app, config, passport);
+	require('./passport')(app, config, passport);
 
 	// find routes
 	globule.find('./app/routes/**/*.js').forEach(function(route) {

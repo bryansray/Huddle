@@ -5,13 +5,12 @@ module.exports = function(app, config, passport) {
 	// Configure Passport
 	passport.use(new LocalStrategy({ usernameField: 'email' },
 		function(email, password, done) {
-			User.Model.findOne({ email: email}, function(err, user) {
-				if (err) return done(err);
+			new User({ email: email}).fetch().then(function(user) {
 				if (!user) return done(null, false, { message: "Incorrect Email or Password provided." });
-				if (!user.authenticate(password)) return done(null, false, { message: "Incorrect Email or Password provied."});
+				if (!user.authenticate(password)) return done(null, false); //, { message: "Incorrect Email or Password provied."});
 
-				return done(null, user);
-			});
+				done(null, user);
+			}).catch(function(err) { return done("ERROR: ", err); });
 		}
 	));
 
@@ -20,8 +19,8 @@ module.exports = function(app, config, passport) {
 	});
 
 	passport.deserializeUser(function(id, done) {
-	  User.Model.findById(id, function(err, user) {
-	    done(err, user);
+	  new User({ id: id }).fetch().then(function(user) {
+	    done(null, user);
 	  });
 	});
 

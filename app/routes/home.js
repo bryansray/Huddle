@@ -5,17 +5,23 @@ var home = require('../controllers/home'),
 		sessions = require('../controllers/sessions');
 
 module.exports = function(app, passport) {
-	var isAuthenticated = function(req, res, next) {
-		console.log("Checking authentication ...");
-		if (!req.isAuthenticated()) {
-			req.session.message = "You must be logged in to join the Huddle.";
-			res.redirect('/login');
-		}
-		next();
+	var ensureAuthenticated = function(req, res, next) {
+		console.log(req.isAuthenticated());
+		if (req.isAuthenticated()) return next();
+
+		req.session.message = "You must be logged in to join the Huddle.";
+		res.redirect('/login');
 	};
 
+	app.use(function(req, res, next) {
+		if (req.user)
+			res.locals.current_user = req.user.toJSON();
+		
+		next();
+	});
+
 	app.route('/')
-		.get(isAuthenticated, home.index);
+		.get(ensureAuthenticated, home.index);
 
 	app.route('/login')
 		.get(sessions.new)
