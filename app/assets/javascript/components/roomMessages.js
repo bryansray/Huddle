@@ -28,7 +28,7 @@ var RoomMessagesComponent = Ractive.extend({
 		var url = "/rooms/" + room.id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
-			this.set('messages', response.body[0].messages);
+			this.set('messages', response.body);
 		}, this));
 	},
 

@@ -41,5 +41,5 @@ module.exports = function(app, passport) {
 	app.route('/rooms/:id').get(rooms.show);
 
 	// Messages
-	app.route('/rooms/:roomId/messages').get(rooms.index);
+	app.route('/rooms/:roomId/messages').get(messages.index);
 };

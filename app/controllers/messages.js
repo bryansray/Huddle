@@ -1,11 +1,12 @@
 var Room = require('../models/room');
+var Message = require('../models/message');
 
 exports.index = function(req, res) {
 	var roomId = req.params.roomId;
 
-	// Room.Model.findOne({ _id: roomId }, function(err, room) {
-	// 	return res.json(room);
-	// });
+	Message.where({ room_id: roomId }).fetchAll({ withRelated: 'user' }).then(function(messages) {
+		return res.json(messages.toJSON());
+	});
 };
 
 exports.create = function(req, res) {
