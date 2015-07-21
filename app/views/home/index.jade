@@ -54,7 +54,7 @@ block content
 							{{ user.displayName }}
 							{{ /if }}
 						div#chat-message.flexitem.message {{{ html }}}
-						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(timestamp) }}") {{ formatTime(timestamp) }}
+						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(created_at) }}") {{ formatTime(created_at) }}
 					{{ /each }}
 		div#chat-input-area.flexitem.chat-input-container
 			form(action='/rooms/1/messages' method='POST' on-submit="messageSubmit")
