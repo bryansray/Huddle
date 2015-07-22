@@ -2,6 +2,9 @@ extends ../shared/layouts/application
 
 block scripts
 	script(src='/javascript/application.js')
+	- if (room)
+		script.
+			var _preloadedRoomId = !{room.id};
 
 block content
 	div#huddle-app
