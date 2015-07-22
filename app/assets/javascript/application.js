@@ -53,6 +53,10 @@ var huddle = new Ractive({
 	},
 });
 
+window.onpopstate = function(event) {
+	console.log("popstate: ", event.state);
+}
+
 socket.on('connect', function() {
 });
 
