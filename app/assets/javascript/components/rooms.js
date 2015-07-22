@@ -14,10 +14,13 @@ var RoomsComponent = Ractive.extend({
 	template: '#rooms-template',
 
 	onconstruct: function() {
-		console.log("constructing RoomsComponent.");
+		console.log("Constructing RoomsComponent.");
 		superagent.get('/rooms', _.bind(function(data, response) {
 			this.set('rooms', response.body);
-			this.set('activeRoom', response.body[0]);
+			if (typeof _preloadedRoomId !== 'undefined') {
+				var room = _.find(response.body, function(room) { return room.id === _preloadedRoomId; });
+				this.set('activeRoom', room);
+			}
 		}, this));
 	},
 
@@ -32,7 +35,9 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	loadRoom: function(event, room) {
+		history.pushState(room, room.name, event.node.href);
 		this.set('activeRoom', room);
+		return false;
 	},
 
 	newRoom: function(event) {
