@@ -30,6 +30,7 @@ var RoomMessagesComponent = Ractive.extend({
 
 		superagent.get(url).end(_.bind(function(status, response) {
 			this.set('messages', response.body);
+			this.scrollToTop();
 		}, this));
 	},
 
