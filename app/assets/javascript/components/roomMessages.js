@@ -37,7 +37,7 @@ var RoomMessagesComponent = Ractive.extend({
 	messageSubmit: function() {
 		var message = this.get('messageInput'),
 				room = this.parent.get('activeRoom');
-		this.root.socket.emit('message', { userId: _currentUserId, roomId: room.id, message: message });
+		this.root.socket.emit('message', { userId: this.root.get('current_user.id'), roomId: room.id, message: message });
 	},
 
 	handleTyping: function(event) {
