@@ -6,7 +6,6 @@ var home = require('../controllers/home'),
 
 module.exports = function(app, passport) {
 	var ensureAuthenticated = function(req, res, next) {
-		console.log(req.isAuthenticated());
 		if (req.isAuthenticated()) return next();
 
 		req.session.message = "You must be logged in to join the Huddle.";
@@ -28,6 +27,7 @@ module.exports = function(app, passport) {
 		.post(passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
 	app.route('/logout').get(sessions.delete);
+	app.route('/session').get(sessions.show);
 
 	// Users
 	app.route('/users').post(users.create);
