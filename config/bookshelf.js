@@ -12,5 +12,6 @@ var knex = require('knex')({
 var Bookshelf = require('bookshelf')(knex);
 
 Bookshelf.plugin('registry');
+Bookshelf.plugin('visibility');
 
 module.exports = Bookshelf;

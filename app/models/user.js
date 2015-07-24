@@ -3,6 +3,7 @@ var Bookshelf = require('../../config/bookshelf'),
 
 var User = Bookshelf.Model.extend({
 	tableName: 'users',
+	hidden: ['password', 'salt', 'resetPasswordToken', 'resetPasswordExpirationDate'],
 
 	initialize: function() {
 		this.on('saving', function() { 
