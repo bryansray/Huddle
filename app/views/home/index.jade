@@ -1,10 +1,14 @@
 extends ../shared/layouts/application
 
 block scripts
-	script(src='/javascript/application.js')
+	- if (current_user)
+		script.
+			var _currentUserId = !{current_user.id};
 	- if (room)
 		script.
 			var _preloadedRoomId = !{room.id};
+
+	script(src='/javascript/application.js')
 
 block content
 	div#huddle-app
@@ -49,7 +53,7 @@ block content
 			div.flexbox.chat-message-wrapper
 				div#chat-messages.flexitem.messages
 					{{ #each messages }}
-					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }} {{ #if tags }}{{ tags.join(' ') }} {{ /if }}")
+					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }} {{ #if tags }}{{ tags.join(' ') }} {{ /if }} {{ user.id === ~/current_user.id ? 'current_user' : '' }}")
 						div#chat-username.flexitem.username 
 							{{ #if from_user }}
 							{{ from_user.displayName }}
