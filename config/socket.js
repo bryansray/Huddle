@@ -28,7 +28,7 @@ module.exports = function(server) {
 					// var message = "*** " + user.get('displayName') + " joined the Room.";
 
 					var joinedEventData = { users: [] };
-					
+
 					User
 						.query(function(qb) {
 							qb.whereIn('id', userIds);
@@ -57,7 +57,11 @@ module.exports = function(server) {
 		socket.on('message', function(data) {
 			console.log(data);
 
-			var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig;
+			var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
+					regexMentions = /(^|\s)(@[a-z\d_-]+)/ig;
+
+			var regexHashtagsReplace = "$1<span class=\"hash-tag\">$2</span>",
+					regexMentionsReplace = "$1<span class=\"mention\">$2</span>";
 
 			var message = data.message,
 					userId = data.userId,
@@ -65,7 +69,9 @@ module.exports = function(server) {
 					timestamp = new Date();
 
 			var tags = message.match(regexHashtags),
-					html = markdown.toHTML(message, 'Gruber').replace(regexHashtags, "$1<span class=\"hash-tag\">$2</span>");
+					html = markdown.toHTML(message, 'Gruber')
+						.replace(regexHashtags, regexHashtagsReplace)
+						.replace(regexMentions, regexMentionsReplace);
 
 			if (tags) tags = tags.map(function(tag) { return tag.replace(/ /g, '').replace( /#/, ''); })
 
