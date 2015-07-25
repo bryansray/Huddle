@@ -25,9 +25,10 @@ module.exports = function(server) {
 				.fetch()
 				.then(function(user) {
 					var room = { id: data.roomId };
-					var message = "*** " + user.get('displayName') + " joined the Room.";
+					// var message = "*** " + user.get('displayName') + " joined the Room.";
 
 					var joinedEventData = { users: [] };
+					
 					User
 						.query(function(qb) {
 							qb.whereIn('id', userIds);
@@ -38,8 +39,8 @@ module.exports = function(server) {
 							joinedEventData.from_user = { displayName: "Huddle" };
 							joinedEventData.user = { firstName: user.get('firstName'), lastName: user.get('lastName'), displayName: user.get('displayName'), status: 'active', id: user.id };
 							joinedEventData.room = room;
-							joinedEventData.message = message;
-							joinedEventData.html = markdown.toHTML(message);
+							// joinedEventData.message = message;
+							// joinedEventData.html = markdown.toHTML(message);
 							joinedEventData.timestamp = new Date();
 						}).done(function() {
 							socket.join(data.roomId);

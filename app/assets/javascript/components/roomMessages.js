@@ -53,8 +53,8 @@ var RoomMessagesComponent = Ractive.extend({
 	},
 
 	joinedEvent: function(data) {
-		var messages = this.get('messages');
-		messages.push(data);
+		// var messages = this.get('messages');
+		// messages.push(data);
 	},
 
 	scrollToTop: function() {
