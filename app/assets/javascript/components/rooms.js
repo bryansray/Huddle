@@ -28,6 +28,15 @@ var RoomsComponent = Ractive.extend({
 		console.log("Initializing RoomsComponent.");
 		this.on('loadRoom', this.loadRoom);
 		this.on('newRoom', this.newRoom);
+
+		window.onpopstate = _.bind(function(event) {
+			var rooms = this.get('rooms'),
+					room = _.find(rooms, function(room) { return room.id === event.state.room.id });
+
+			console.log("popstate: ", event.state);
+			document.title = event.state.title;
+			this.set('activeRoom', room);
+		}, this);
 	},
 
 	oncomplete: function() {
@@ -35,7 +44,9 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	loadRoom: function(event, room) {
-		history.pushState(room, room.name, event.node.href);
+		var title = "Huddle .:. " + room.name;
+		document.title = title;
+		history.pushState({ room: room, title: title }, room.name, event.node.href);
 		this.set('activeRoom', room);
 		return false;
 	},
