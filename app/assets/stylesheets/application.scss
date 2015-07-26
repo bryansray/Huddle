@@ -5,16 +5,16 @@
 $grey: #cecece;
 $white: #fff;
 
-html,
-body { height: 100%; }
+// html,
+// body, #huddle-app, .huddle-container { height: 100vh; }
 
-.chat-message-wrapper { height: 400px; }
+// .chat-message-wrapper { height: 600px; }
 
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 9pt;
   margin: 0;
-  min-height: 100%;
+  // min-height: 100%;
   position: relative;
 }
 
@@ -38,6 +38,7 @@ body {
 
 .scroll-wrapper {
   position: relative;
+  height: 75.5vh;
 
   .chat-message-wrapper {
     // height: 400px; // TODO : This will be manipulated via some javascript
@@ -253,8 +254,8 @@ body {
 .room-header {
   background-color: #f5f5f5;
   border-bottom: 1px solid $grey;
-  box-sizing: border-box;
-  max-height: 70px;
+  // box-sizing: border-box;
+  // max-height: 70px;
   padding: 10px;
 
   .room-header-inner {
