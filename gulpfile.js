@@ -6,6 +6,7 @@ var gulp = require('gulp'),
 		requireDir = require('require-dir'),
 		babelify = require('babelify'),
 		mocha = require('gulp-mocha'),
+		bourbon = require('node-bourbon'),
 		plugins = require('gulp-load-plugins')({ rename: {
 				"gulp-ruby-sass": "sass"
 			}
@@ -29,7 +30,7 @@ var config = {
 			verbose: true,
 			lineNumbers: true,
 
-			loadPath: './node_modules/font-awesome/scss',
+			loadPath: ['./node_modules/font-awesome/scss', bourbon.includePaths],
 		}
 	},
 
