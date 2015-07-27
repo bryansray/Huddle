@@ -1,4 +1,5 @@
 // @import 'compass/reset';
+@import 'bourbon';
 @import 'compass/css3/border-radius';
 @import 'font-awesome';
 
@@ -37,8 +38,8 @@ body {
 }
 
 .scroll-wrapper {
-  position: relative;
   height: 75.5vh;
+  position: relative;
 
   .chat-message-wrapper {
     // height: 400px; // TODO : This will be manipulated via some javascript
@@ -82,8 +83,8 @@ body {
     .message { color: #d51b1b; font-weight: bold; }
   }
 
-  &.current_user {
-    background-color: #DFF1FF;
+  &.current-user {
+    background-color: #dff1ff;
   }
 
   .username { color: #707070; padding-right: 2rem; text-align: right; width: 110px; }
@@ -100,24 +101,26 @@ body {
   }
 
   p { margin: 0; }
+  
   ul { 
     margin-bottom: 0;
     margin-top: 0;
     padding-left: 1rem; 
   }
+
   blockquote {
     border-left: 1px solid #ccc;
     font-style: italic;
-    margin-left: 0.4rem;
     margin-bottom: 0;
+    margin-left: .4rem;
     margin-top: 0;
-    padding-left: 0.5rem;
+    padding-left: .5rem;
   }
 }
 
 .mention {
-  background-color: #FDFDD4;
-  border: 1px solid #E2E28C;
+  background-color: #fdfdd4;
+  border: 1px solid #e2e28c;
   border-radius: 3px;
   font-size: x-small;
   font-style: italic;
@@ -297,24 +300,22 @@ h6 {
 
   button {
     background-color: rgb(236, 236, 236);
-    border-radius: 7px;
     border: 1px solid #545454;
+    border-radius: 7px;
     color: rgb(84, 84, 84);
     padding: .2rem 1.1rem;
   }
+
+  label {
+    display: inline-block;
+    width: 25%;
+  }
+
+  input { width: 70%; }
 }
 
 
 .form-group {
-  margin: .4rem 0;
   line-height: 1.4rem;
-}
-
-.login {
-  label {
-    width: 25%;
-    display: inline-block;
-  }
-
-  input { width: 70%; }
+  margin: .4rem 0;
 }
