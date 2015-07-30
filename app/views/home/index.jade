@@ -52,12 +52,10 @@ block content
 		div.scroll-wrapper
 			div.flexbox.chat-message-wrapper
 				div#chat-messages.flexitem.messages
-					{{ #each messages }}
+					{{ #each messages:i }}
 					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}{{ _.pluck(tags, 'name').join(' ') }} {{ user.id === ~/current_user.id ? 'current-user' : '' }}")
 						div#chat-username.flexitem.username 
-							{{ #if from_user }}
-							{{ from_user.displayName }}
-							{{ else }}
+							{{ #if i === 0 || messages[i - 1].user.id !== user.id }}
 							{{ user.displayName }}
 							{{ /if }}
 						div#chat-message.flexitem.message {{{ html }}}
