@@ -30,6 +30,8 @@ var RoomsComponent = Ractive.extend({
 		this.on('newRoom', this.newRoom);
 
 		window.onpopstate = _.bind(function(event) {
+			if (!event.state) return;
+
 			var rooms = this.get('rooms'),
 					room = _.find(rooms, function(room) { return room.id === event.state.room.id });
 
