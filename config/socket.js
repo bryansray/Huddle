@@ -1,6 +1,11 @@
 var User = require('../app/models/user'),
 		Room = require('../app/models/room'),
+		Tag = require('../app/models/tag'),
+		Tags = require('../app/models/tags'),
 		Message = require('../app/models/message');
+
+var Promise = require('bluebird'),
+		_ = require('lodash');
 
 module.exports = function(server) {
 	var io = require('socket.io')(server),
@@ -55,8 +60,6 @@ module.exports = function(server) {
 
 		// MESSAGE (RECEIVED) EVENT
 		socket.on('message', function(data) {
-			console.log(data);
-
 			var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
 					regexMentions = /(^|\s)(@[a-z\d_-]+)/ig;
 
@@ -68,26 +71,50 @@ module.exports = function(server) {
 					roomId = data.roomId,
 					timestamp = new Date();
 
-			var tags = message.match(regexHashtags),
+			var tagNames = message.match(regexHashtags),
 					html = markdown.toHTML(message, 'Gruber')
 						.replace(regexHashtags, regexHashtagsReplace)
 						.replace(regexMentions, regexMentionsReplace);
 
-			if (tags) tags = tags.map(function(tag) { return tag.replace(/ /g, '').replace( /#/, ''); })
+			if (tagNames) tagNames = tagNames.map(function(tag) { return tag.replace(/ /g, '').replace( /#/, ''); })
 
-			User.where({ id: userId })
-				.fetch()
-				.then(function(user) {
-					var message = { user_id: user.id, room_id: roomId, original: message, html: html /* , tags: tags */ };
+			// Find tags
+			Tag.query(function(qb) { qb.whereIn('name', tagNames); })
+				.fetchAll()
+				.then(function(results) {
+					if (!results) results = [];
 
-					Message.forge(message)
-						.save()
-						.then(function(model) {
-							model.set('user', user);
-							console.log(model.toJSON());
-							io.sockets.in(roomId).emit('message', model.toJSON());
-						}).catch(function(err) { console.log(err); });
+					var names = results.pluck('name');
+					var newTags = _.reject(tagNames, function(t) { return _.contains(names, t); });
+
+					var forgedTags = Tags.forge(_.map(newTags, function(t) { return { name: t }; }));
+					forgedTags.invokeThen('save', null, {});
+					
+					results.add(forgedTags.models)
+
+					return results;
+				}).then(function(tags) {
+					// Find user
+					User.where({ id: userId })
+						.fetch()
+						.then(function(user) {
+							var message = { user_id: user.id, room_id: roomId, original: message, html: html };
+
+							Message.forge(message)
+								.save()
+								.then(function(message) {
+									message.tags().attach(tags.models);
+
+									return message;
+								})
+								.then(function(message) {
+									message.set('user', user);
+									message.set('tags', tags.models);
+									io.sockets.in(roomId).emit('message', message.toJSON());
+								})
+								.catch(function(err) { console.log(err); });
+						});
+					});
 				});
-		});
 	});
 };
