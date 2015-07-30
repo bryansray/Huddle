@@ -34,7 +34,8 @@ var RoomsComponent = Ractive.extend({
 					room = _.find(rooms, function(room) { return room.id === event.state.room.id });
 
 			console.log("popstate: ", event.state);
-			document.title = event.state.title;
+			if (event.state)
+				document.title = event.state.title;
 			this.set('activeRoom', room);
 		}, this);
 	},
