@@ -61,7 +61,6 @@ body {
 }
 
 .message-container {
-  border-bottom: 1px solid $grey;
   margin: 0;
   padding: .4rem 0;
 
@@ -94,10 +93,11 @@ body {
   }
 
   .timestamp { 
-    color: #999; 
-    padding: 0 .5rem; 
+    color: #999;
+    font-size: smaller;
+    font-weight: 100;
+    padding: 0 0.7rem 0 .5rem;
     text-align: right; 
-    // width: 80px;
   }
 
   p { margin: 0; }
