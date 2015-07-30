@@ -15,9 +15,11 @@ var config = {
 
 var knex = require('knex')(config);
 
-knex.schema.dropTableIfExists('users').catch(function() {});
-knex.schema.dropTableIfExists('messages').catch(function(){});
-knex.schema.dropTableIfExists('rooms').catch(function(err) { console.log("error: ", err); });
+var handleError = function(err) {
+	console.log("error: ", err);
+};
+
+knex.schema.raw("DROP TABLE IF EXISTS users, messages, tags, rooms, messages_tags CASCADE;").catch(handleError);
 
 knex.schema.createTable('users', function(table){
 	table.increments().primary();
@@ -33,28 +35,49 @@ knex.schema.createTable('users', function(table){
 	table.dateTime('resetPasswordExpirationDate');
 
 	table.timestamps();
-}).catch(function(err) {
-	console.log(err);
-})
+}).catch(handleError);
 
 knex.schema.createTable('rooms', function(table) {
-	console.log("Creating table ...");
 	table.increments().primary();
+
 	table.string('name');
 	table.string('description');
+
 	table.timestamps();
-}).then(function() {
-	// Insert a Row ...
-	knex.insert({ name: "General Discussion", description: "A channel for general discussion." }).into('rooms').catch(function(err) { console.log("error: ", err); });
-}).catch(function(err) {
-	console.log("ERROR: ", err);
-});
+}).catch(handleError);
 
 knex.schema.createTable('messages', function(table) {
 	table.increments().primary();
+	
 	table.integer('user_id').references('users.id');
 	table.integer('room_id').references('rooms.id');
+	
 	table.text('original');
 	table.text('html');
+
+	// table.specificType('tags', 'text[]');
+
 	table.timestamps();
-}).catch(function(err) { console.log("error: ", err); });
+})
+.then(function(table) {
+	knex('rooms').insert({ name: "General Discussion", description: "General Discussion Room for the Team."}).catch(handleError);
+})
+.then(function() {
+	knex.schema.createTable('tags', function(table) {
+		table.increments().primary();
+
+		table.string('name');
+
+		table.timestamps();
+	}).catch(handleError);
+
+	knex.schema.createTable('messages_tags', function(table) {
+		table.increments().primary();
+
+		table.integer('message_id').references('messages.id');
+		table.integer('tag_id').references('tags.id');
+
+		table.timestamps();
+	}).catch(handleError);
+
+}).catch(handleError);
