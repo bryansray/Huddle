@@ -30,6 +30,10 @@ var huddle = new Ractive({
 		RoomList: RoomsComponent,
 	},
 
+	data: {
+		_: _
+	},
+
 	oninit: function() {
 		console.log("Initializing Huddle ...");
 		this.set('current_user', { id: window._currentUserId });
