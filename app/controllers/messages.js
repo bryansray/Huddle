@@ -4,7 +4,7 @@ var Message = require('../models/message');
 exports.index = function(req, res) {
 	var roomId = req.params.roomId;
 
-	Message.where({ room_id: roomId }).fetchAll({ withRelated: 'user' }).then(function(messages) {
+	Message.where({ room_id: roomId }).fetchAll({ withRelated: ['user', 'tags'] }).then(function(messages) {
 		return res.json(messages.toJSON());
 	});
 };
