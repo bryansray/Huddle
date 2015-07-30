@@ -9,6 +9,14 @@ var RoomsComponent = require('./components/rooms'),
 		RoomMessagesComponent = require('./components/roomMessages'),
 		RoomUsersComponent = require('./components/roomUsers');
 
+var PrivateMessagesComponent = Ractive.extend({
+	template: "#private-messages-template",
+
+	oninit: function() {
+		console.log("Initializing PrivateMessagesComponent.");
+	}
+});
+
 var RoomComponent = Ractive.extend({
 	template: "#room-template",
 
@@ -28,6 +36,7 @@ var huddle = new Ractive({
 	components: { 
 		Room: RoomComponent,
 		RoomList: RoomsComponent,
+		PrivateMessageList: PrivateMessagesComponent
 	},
 
 	data: {
@@ -39,8 +48,6 @@ var huddle = new Ractive({
 		this.set('current_user', { id: window._currentUserId });
 
 		this.socket = io.connect('http://localhost:3000', { query: "userId=" + window._currentUserId });
-
-
 		this.socket.on('connect', _.bind(this.onConnect, this.socket, this));
 		this.socket.on('error', _.bind(this.onError, this.socket, this));
 	},

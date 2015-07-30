@@ -3,9 +3,21 @@ var Ractive = require('ractive');
 var RoomUserComponent = Ractive.extend({
 	template: '#room-user-template',
 
-	oninit: function() { },
+	oninit: function() {
+		this.on('privateMessage', this.privateMessage);
+	},
 
-	computed: { displayName: '${firstName} + " " + ${lastName}' }
+	privateMessage: function(event, user) {
+		console.log("Private message: ", arguments);
+
+		var title = "Huddle .:. " + this.get('displayName');
+		document.title = title;
+		history.pushState({ user: user, title: title }, title, event.node.href);
+
+		return false;
+	},
+
+	computed: { displayName: '${user.firstName} + " " + ${user.lastName}' }
 });
 
 module.exports = RoomUserComponent;

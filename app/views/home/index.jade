@@ -16,7 +16,10 @@ block content
 	script#huddle-template(type='text/ractive')
 		div#huddle-app-container.flexbox.huddle-container
 			div#left-sidebar.flexitem.sidebar.sidebar-left
-				<RoomList>
+				section
+					<RoomList>
+				section
+					<PrivateMessageList>
 
 			div#chat-area-container.flexitem.chat-area
 				<Room>
@@ -38,13 +41,13 @@ block content
 		div#chat-users.users
 			ul.users-list.sidebar-nav
 				{{ #each users }}
-				<RoomUser firstName="{{ firstName }}" lastName=" {{ lastName }}">
+				<RoomUser user="{{ . }}">
 				{{ /each }}
 
 	script#room-user-template(type='text/ractive')
 		li.user-information
 			div.user-metadata
-				a(href="#") 
+				a(href='/chat/user/{{ id }}' on-click="privateMessage:{{ user }}")
 					i.fa.fa-circle(class="{{ status }}")
 					| {{ displayName }}
 
@@ -77,6 +80,16 @@ block content
 					label(for="description") Description
 					input(type="text")
 				button(type="submit") Create Room
+
+	script#private-messages-template(type='text/ractive')
+		div#active-private-messages.private-messages-wrapper
+			ul#private-messages-container.private-messages-container.sidebar-nav
+				li.sidebar-heading
+					strong Users
+				{{ #each users }}
+				li#users-name.user-name
+					a(href="/chat/users/{{ id }}", class="")
+				{{ /each }}
 
 	script#rooms-template(type='text/ractive')
 		div#active-rooms.rooms-wrapper
