@@ -6,7 +6,6 @@ var Message = Bookshelf.Model.extend({
 	hasTimestamps: true,
 
 	initialize: function() { 
-		console.log("Initializing Message ...");
 	},
 
 	user: function() {
@@ -15,6 +14,10 @@ var Message = Bookshelf.Model.extend({
 
 	room: function() {
 		return this.belongTo('Room');
+	},
+
+	tags: function() {
+		return this.belongsToMany('Tag'); //.through('MessageTag');
 	}
 });
 
