@@ -51,7 +51,7 @@ var RoomsComponent = Ractive.extend({
 		document.title = title;
 		history.pushState({ room: room, title: title }, room.name, event.node.href);
 		this.set('activeRoom', room);
-		return false;
+		event.original.preventDefault();
 	},
 
 	newRoom: function(event) {
