@@ -231,6 +231,7 @@ body {
     display: block;
     line-height: 1.1rem;
     overflow: hidden;
+    padding: 9px 30px 10px 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
     word-wrap: break-word;
@@ -248,10 +249,6 @@ body {
 
 .room-container {
   height: 100%;
-}
-
-.rooms-container a {
-  padding: 9px 30px 10px 10px;
 }
 
 .room-header {
