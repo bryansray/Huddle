@@ -14,7 +14,7 @@ var RoomUserComponent = Ractive.extend({
 		document.title = title;
 		history.pushState({ user: user, title: title }, title, event.node.href);
 
-		return false;
+		event.original.preventDefault();
 	},
 
 	computed: { displayName: '${user.firstName} + " " + ${user.lastName}' }
