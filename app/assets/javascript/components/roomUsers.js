@@ -27,10 +27,7 @@ var RoomUsersComponent = Ractive.extend({
 	},
 
 	onJoined: function(data) {
-		console.log("OnJoin: ");
 		this.set('users', data.users);
-		// var users = this.get('users');
-		// users.push(data.user);
 	}
 });
 
