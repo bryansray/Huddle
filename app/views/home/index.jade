@@ -86,9 +86,9 @@ block content
 			ul#private-messages-container.private-messages-container.sidebar-nav
 				li.sidebar-heading
 					strong Users
-				{{ #each users }}
+				{{ #each chats }}
 				li#users-name.user-name
-					a(href="/chat/users/{{ id }}", class="")
+					a(href="/chat/users/{{ id }}", class="") {{ displayName }}
 				{{ /each }}
 
 	script#rooms-template(type='text/ractive')

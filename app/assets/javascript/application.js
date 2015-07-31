@@ -12,6 +12,10 @@ var RoomsComponent = require('./components/rooms'),
 var PrivateMessagesComponent = Ractive.extend({
 	template: "#private-messages-template",
 
+	data: function() {
+		return { chats: [] };
+	},
+
 	oninit: function() {
 		console.log("Initializing PrivateMessagesComponent.");
 	}
@@ -44,8 +48,10 @@ var huddle = new Ractive({
 	},
 
 	oninit: function() {
-		console.log("Initializing Huddle ...");
+		console.log("Initializing Huddle.");
 		this.set('current_user', { id: window._currentUserId });
+
+		this.on('RoomUser.privateMessage', this.privateMessage);
 
 		this.socket = io.connect('http://localhost:3000', { query: "userId=" + window._currentUserId });
 		this.socket.on('connect', _.bind(this.onConnect, this.socket, this));
@@ -53,14 +59,24 @@ var huddle = new Ractive({
 	},
 
 	oncomplete: function() {
-		console.log("Huddle Complete ...");
-		var component = this.findComponent('RoomList');
-		component.observe('activeRoom', this.activateRoom, { context: this });
+		console.log("Huddle Complete.");
+		
+		var roomListComponent = this.findComponent('RoomList'),
+				roomComponent = this.findComponent('Room');
+		
+		roomListComponent.observe('activeRoom', this.activateRoom, { context: this });
+		// roomComponent.observe('privateMessage', this.privateMessage, { context: this });
+	},
+
+	privateMessage: function(event, user) {
+		console.log("Private Message Send: ", arguments);
+		var component = this.findComponent('PrivateMessageList');
+		var chats = component.get('chats');
+		chats.push(user);
 	},
 
 	// CONNECT : Should we request the current_user?
 	onConnect: function(ractive) { 
-		console.log("OnConnect: ");
 		superagent.get('/session').end(function(err, response) {
 			if (err) console.log("error: ", err);
 			else ractive.set('current_user', response.body);
