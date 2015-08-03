@@ -9,6 +9,42 @@ var RoomsComponent = require('./components/rooms'),
 		MessagesComponent = require('./components/roomMessages'),
 		UsersComponent = require('./components/roomUsers');
 
+var ChatInputComponent = Ractive.extend({
+	template: "#chat-input-template",
+
+	data: function() {
+		return {
+			input: ""
+		};
+	},
+
+	oninit: function() {
+		console.log("Initializing ChatInputComponent.");
+
+		this.on('typing', this.handleTyping);
+		this.on('messageSubmit', this.messageSubmit);
+	},
+
+	messageSubmit: function() {
+		var message = this.get('input'),
+				room = this.parent.get('activeRoom');
+		this.root.socket.emit('message', { userId: this.root.get('current_user.id'), roomId: room.id, message: message });
+		// this.scrollToTop();
+	},
+
+	handleTyping: function(event) {
+		if (event.original.keyCode === 13 && event.original.shiftKey === false) {
+			event.original.preventDefault();
+			this.messageSubmit();
+			this.clearMessage();
+		}
+	},
+
+	clearMessage: function() {
+		this.set('input', '');
+	}
+});
+
 var ConversationsComponent = Ractive.extend({
 	template: "#conversations-template",
 
@@ -28,7 +64,7 @@ var ConversationsComponent = Ractive.extend({
 		var exists = _.contains(_.pluck(conversations, 'id'), user.id);
 
 		if (!exists)
-			conversations.push({ user: user });
+			conversations.push({ user: user, messages: [] });
 
 		event.original.preventDefault();
 	}
@@ -43,13 +79,13 @@ var ChatComponent = Ractive.extend({
 
 	components: {
 		Messages: MessagesComponent,
-		Users: UsersComponent
+		Users: UsersComponent,
+		ChatInput: ChatInputComponent
 	},
 
 	partials: {
 		Room: document.getElementById('room-template').text,
 		Message: document.getElementById('message-template').text,
-		ChatInput: document.getElementById('chat-input-template').text
 	},
 
 	oninit: function() {

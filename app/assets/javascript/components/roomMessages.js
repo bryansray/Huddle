@@ -3,25 +3,21 @@ var Ractive = require('ractive'),
 		_ = require('lodash');
 
 var RoomMessagesComponent = Ractive.extend({
-	template: '#room-messages-template',
+	template: '#chat-messages-template',
 
 	data: function() {
 		return { 
 			messages: [],
-			messageInput: "",
 
 			previousMessageFromCurrentUser: function(previousUserId, currentUserId) { return previousUserId === currentUserId; }
 		};
 	},
 
 	oninit: function() {
-		this.on('typing', this.handleTyping);
-		this.on('messageSubmit', this.messageSubmit);
-
 		this.root.observe('activeRoom', this.getRoomMessages, { context: this });
 
-		this.root.socket.on('joined', _.bind(this.joinedEvent, this));
-		this.root.socket.on('message', _.bind(this.messageEvent, this));
+		this.root.socket.on('joined', this.joinedEvent.bind(this));
+		this.root.socket.on('message', this.messageEvent.bind(this));
 	},
 
 	oncomplete: function() {
@@ -37,27 +33,8 @@ var RoomMessagesComponent = Ractive.extend({
 		superagent.get(url).end(_.bind(function(status, response) {
 			var messages = this.get('messages');
 			this.set('messages', response.body);
-			this.scrollToTop();
+			this.scrollToBottom();
 		}, this));
-	},
-
-	messageSubmit: function() {
-		var message = this.get('messageInput'),
-				room = this.parent.get('activeRoom');
-		this.root.socket.emit('message', { userId: this.root.get('current_user.id'), roomId: room.id, message: message });
-		this.scrollToTop();
-	},
-
-	handleTyping: function(event) {
-		if (event.original.keyCode === 13 && event.original.shiftKey === false) {
-			event.original.preventDefault();
-			this.messageSubmit();
-			this.clearMessage();
-		}
-	},
-
-	clearMessage: function() {
-		this.set('messageInput', '');
 	},
 
 	joinedEvent: function(data) {
@@ -65,7 +42,7 @@ var RoomMessagesComponent = Ractive.extend({
 		// messages.push(data);
 	},
 
-	scrollToTop: function() {
+	scrollToBottom: function() {
 		var messagesElement = this.find('#chat-messages');
 		messagesElement.scrollTop = messagesElement.scrollHeight;
 	},
@@ -82,8 +59,7 @@ var RoomMessagesComponent = Ractive.extend({
 		var messages = this.get('messages');
 		messages.push(data);
 
-		if (this._scrollPercentage() >= 98)
-			this.scrollToTop();
+		if (this._scrollPercentage() >= 98) this.scrollToBottom();
 	},
 
 	_scrollPercentage: function(element) {
