@@ -17,12 +17,22 @@ block content
 		div#huddle-app-container.flexbox.huddle-container
 			div#left-sidebar.flexitem.sidebar.sidebar-left
 				section
-					<RoomList>
+					<Rooms />
 				section
-					<PrivateMessageList>
+					<Conversations />
 
 			div#chat-area-container.flexitem.chat-area
-				<Room>
+				<Chat />
+	
+	script#chat-template(type='text/ractive')
+		section#chat-container
+			{{ #if chat.id }}
+			{{ >Room }}
+			{{ elseif chat.user }}
+			{{ >Message }}
+			{{ else }}
+			p Nothing selected.
+			{{ /if }}
 
 	script#room-template(type='text/ractive')
 		header.room-header
@@ -33,10 +43,11 @@ block content
 					p {{ activeRoom.description }}
 		section#room-container.flexbox.room-container
 			div#chat-message-area.flexitem.chat-message-area
-				<RoomMessages>
+				<Messages/>
 
 			div#sidebar-right.flexitem.sidebar-right
-				<RoomUsers>
+				<Users>
+
 	script#room-users-template(type='text/ractive')
 		div#chat-users.users
 			ul.users-list.sidebar-nav
@@ -58,15 +69,22 @@ block content
 					{{ #each messages:i }}
 					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}{{ _.pluck(tags, 'name').join(' ') }} {{ user.id === ~/current_user.id ? 'current-user' : '' }}")
 						div#chat-username.flexitem.username 
-							{{ #if i === 0 || messages[i - 1].user.id !== user.id }}
+							{{ #if messages.length > 0 && (i === 0 || !previousMessageFromCurrentUser(messages[i - 1].user.id, user.id)) }}
 							{{ user.displayName }}
 							{{ /if }}
 						div#chat-message.flexitem.message {{{ html }}}
 						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(created_at) }}") {{ formatTime(created_at) }}
 					{{ /each }}
+		{{ >ChatInput }}
+		
+	script#chat-input-template(type='text/ractive')
 		div#chat-input-area.flexitem.chat-input-container
 			form(action='/rooms/1/messages' method='POST' on-submit="messageSubmit")
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ messageInput }}", on-keypress="typing" on-keydown-input="set('messageInput', event.node.value)")
+
+	script#message-template(type='text/ractive')
+		section.message-container
+			p Private Message
 
 	script#new-room-template(type='text/ractive')
 		div#new-room-container
@@ -81,14 +99,14 @@ block content
 					input(type="text")
 				button(type="submit") Create Room
 
-	script#private-messages-template(type='text/ractive')
-		div#active-private-messages.private-messages-wrapper
-			ul#private-messages-container.private-messages-container.sidebar-nav
+	script#conversations-template(type='text/ractive')
+		section#conversations-container.conversations-wrapper
+			ul#conversations-list.conversations-container.sidebar-nav
 				li.sidebar-heading
-					strong Users
-				{{ #each chats }}
-				li#users-name.user-name
-					a(href="/chat/users/{{ id }}", class="") {{ displayName }}
+					strong Conversations
+				{{ #each conversations }}
+				li.user-name
+					a(href="/chat/users/{{ user.id }}", class="" on-click="loadChat:{{ . }}") {{ user.displayName }}
 				{{ /each }}
 
 	script#rooms-template(type='text/ractive')
@@ -98,7 +116,7 @@ block content
 					strong Rooms
 				{{ #each rooms }}
 				li#room-name.room-name
-					a(href="/rooms/{{ id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadRoom:{{ . }}") {{ name }}
+					a(href="/rooms/{{ id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadChat:{{ . }}") {{ name }}
 				{{ /each}}
 				li#new-room
 					a(href='#' on-click="newRoom") 

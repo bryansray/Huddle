@@ -8,7 +8,9 @@ var RoomMessagesComponent = Ractive.extend({
 	data: function() {
 		return { 
 			messages: [],
-			messageInput: "" 
+			messageInput: "",
+
+			previousMessageFromCurrentUser: function(previousUserId, currentUserId) { return previousUserId === currentUserId; }
 		};
 	},
 

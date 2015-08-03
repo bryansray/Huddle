@@ -8,8 +8,6 @@ var RoomUserComponent = Ractive.extend({
 	},
 
 	privateMessage: function(event, user) {
-		console.log("Private message: ", arguments);
-
 		var title = "Huddle .:. " + this.get('displayName');
 		document.title = title;
 		history.pushState({ user: user, title: title }, title, event.node.href);
