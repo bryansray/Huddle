@@ -5,8 +5,8 @@ exports.index = function(req, res) {
 	var roomId = req.params.roomId;
 
 	Message.where({ room_id: roomId }).query(function(qb) {
-		qb.limit(25);
-		qb.orderBy('created_at', 'desc');
+		// qb.limit(25);
+		// qb.orderBy('created_at', 'desc');
 	}).fetchAll({ withRelated: ['user', 'tags'] }).then(function(messages) {
 		return res.json(messages.toJSON());
 	});
