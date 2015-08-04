@@ -1,7 +1,7 @@
 var Room = require('../models/room');
 
 exports.index = function(req, res) {
-	Room.fetchAll({ withRelated: ['messages'] }).then(function(rooms) {
+	Room.fetchAll().then(function(rooms) {
 		return res.json(rooms);
 	});
 };
