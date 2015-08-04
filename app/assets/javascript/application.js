@@ -65,8 +65,6 @@ var ChatInputComponent = Ractive.extend({
 				currentHistoryIndex = currentHistoryIndex - 1;
 			}
 
-			console.log("currentHistoryIndex (up): ", currentHistoryIndex);
-
 			var message = history[currentHistoryIndex];
 			
 			this.set('currentHistoryIndex', currentHistoryIndex);
@@ -84,8 +82,6 @@ var ChatInputComponent = Ractive.extend({
 			} else {
 				currentHistoryIndex = currentHistoryIndex + 1;
 			}
-
-			console.log("currentHistoryIndex (down): ", currentHistoryIndex);
 
 			var message = history[currentHistoryIndex];
 
