@@ -34,7 +34,10 @@ var ChatInputComponent = Ractive.extend({
 		if (chat.id) { toChatId = chat.id; type = "room" }
 		else { toChatId = chat.user.id; type = "user" }
 
-		// TODO : store what they typed in local storage!
+		this.set('currentHistoryIndex', undefined);
+
+		// TODO : Store separate history for specific room?
+		// TODO : possibly limit local storage to the last N messages?
 		if (!sessionStorage.getItem('messages')) sessionStorage.setItem('messages', JSON.stringify([]));
 
 		var history = JSON.parse(sessionStorage.getItem('messages'));
@@ -49,7 +52,6 @@ var ChatInputComponent = Ractive.extend({
 		if (event.original.keyCode === 13 && event.original.shiftKey === false) {
 			event.original.preventDefault();
 			
-			this.set('currentHistoryIndex', undefined);
 			this.messageSubmit();
 			this.clearMessage();
 		} else if (event.original.keyCode === 38 && event.original.metaKey === true) {
@@ -60,7 +62,6 @@ var ChatInputComponent = Ractive.extend({
 			
 			if (currentHistoryIndex === undefined || currentHistoryIndex < 0) {
 				currentHistoryIndex = history.length - 1;
-				this.set('currentHistoryIndex', currentHistoryIndex);
 			} else {
 				currentHistoryIndex = currentHistoryIndex - 1;
 			}
@@ -78,7 +79,6 @@ var ChatInputComponent = Ractive.extend({
 			
 			if (currentHistoryIndex === undefined || currentHistoryIndex >= history.length) {
 				currentHistoryIndex = 0;
-				this.set('currentHistoryIndex', currentHistoryIndex);
 			} else {
 				currentHistoryIndex = currentHistoryIndex + 1;
 			}
