@@ -42,4 +42,5 @@ module.exports = function(app, passport) {
 
 	// Messages
 	app.route('/rooms/:roomId/messages').get(messages.index);
+	app.route('/chat/users/:userId/messages').get(messages.index)
 };
