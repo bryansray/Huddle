@@ -28,7 +28,9 @@ var RoomMessagesComponent = Ractive.extend({
 	getMessages: function(chat, previousChat, keypath) {
 		if (!chat || chat === previousChat) return;
 
-		var url = event.target.href + "/messages";
+		// var url = event.target.href + "/messages"; 
+		// TODO : Where do I get this from? I no longer have the event.target.href :(
+		var url = "/rooms/" + chat.id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
 			this.set('messages', response.body);
@@ -50,6 +52,8 @@ var RoomMessagesComponent = Ractive.extend({
 	},
 
 	messageEvent: function(data) {
+		console.log("message received: ", data);
+
 		var messages = this.get('messages');
 		messages.push(data);
 

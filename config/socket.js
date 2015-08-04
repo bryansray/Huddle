@@ -67,8 +67,9 @@ module.exports = function(server) {
 					regexMentionsReplace = "$1<span class=\"mention\">$2</span>";
 
 			var message = data.message,
-					userId = data.userId,
-					roomId = data.roomId,
+					userId = data.currentUserId,
+					type = data.type,
+					toChatId = data.toChatId,
 					timestamp = new Date();
 
 			var tagNames = message.match(regexHashtags),
@@ -98,7 +99,7 @@ module.exports = function(server) {
 					User.where({ id: userId })
 						.fetch()
 						.then(function(user) {
-							var message = { user_id: user.id, room_id: roomId, original: message, html: html };
+							var message = { user_id: user.id, room_id: toChatId, original: data.message, html: html };
 
 							Message.forge(message)
 								.save()
@@ -110,7 +111,8 @@ module.exports = function(server) {
 								.then(function(message) {
 									message.set('user', user);
 									message.set('tags', tags.models);
-									io.sockets.in(roomId).emit('message', message.toJSON());
+									
+									io.sockets.in(toChatId).emit('message', message.toJSON());
 								})
 								.catch(function(err) { console.log(err); });
 						});

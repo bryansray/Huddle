@@ -35,8 +35,11 @@ var RoomsComponent = Ractive.extend({
 
 	oninit: function() { 
 		console.log("Initializing RoomsComponent.");
+		
 		this.on('loadChat', this.loadRoom);
 		this.on('newRoom', this.newRoom);
+
+		this.observe('activeRoom', this.activateRoom);
 
 		window.onpopstate = _.bind(function(event) {
 			if (!event.state && !event.state.room) return;
@@ -55,18 +58,24 @@ var RoomsComponent = Ractive.extend({
 		console.log("Completing RoomsComponent.");
 	},
 
+	activateRoom: function(room, previousRoom, keypath) {
+		if (room === null || room === previousRoom) return;
+
+		this.root.socket.emit('join', { roomId: room.id });
+
+
+		var title = "Huddle .:. " + room.name;
+		document.title = title;
+		history.pushState({ room: room, title: title }, room.name, "/rooms/" + room.id);
+	},
+
 	loadRoom: function(event, room) {
 		event.original.preventDefault();
 
 		var currentRoom = this.get('activeRoom');
 		if (currentRoom === room) return;
 
-		var title = "Huddle .:. " + room.name;
-		document.title = title;
-		history.pushState({ room: room, title: title }, room.name, event.node.href);
-
 		this.set('activeRoom', room);
-		this.root.socket.emit('join', { roomId: room.id });
 	},
 
 	newRoom: function(event) {

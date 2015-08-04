@@ -30,8 +30,6 @@ block content
 			{{ >Room }}
 			{{ elseif chat.user }}
 			{{ >Message }}
-			{{ else }}
-			p Nothing selected.
 			{{ /if }}
 
 	script#room-template(type='text/ractive')
@@ -90,7 +88,7 @@ block content
 	script#chat-input-template(type='text/ractive')
 		div#chat-input-area.flexitem.chat-input-container
 			form(action='{{ url }}' method='POST' on-submit="messageSubmit")
-				textarea#message-input.huddle-message-input(autofocus='true', value="{{ input }}", on-keypress="typing" on-keydown-input="set('input', event.node.value)")
+				textarea#message-input.huddle-message-input(autofocus='true', value="{{ input }}", on-keydown-input-change="typing")
 
 	script#new-room-template(type='text/ractive')
 		div#new-room-container
@@ -110,9 +108,9 @@ block content
 			ul#conversations-list.conversations-container.sidebar-nav
 				li.sidebar-heading
 					strong Conversations
-				{{ #each conversations }}
-				li.user-name
-					a(href="/chat/users/{{ user.id }}", class="" on-click="loadChat:{{ . }}") {{ user.displayName }}
+				{{ #each conversations:i }}
+				li.user-name(id="conversation-{{ i }}")
+					a(href="/chat/users/{{ user.id }}", class="{{ this === active ? 'active' : '' }}" on-click="loadChat:{{ . }}") {{ user.displayName }}
 				{{ /each }}
 
 	script#rooms-template(type='text/ractive')
@@ -121,7 +119,7 @@ block content
 				li.sidebar-heading 
 					strong Rooms
 				{{ #each rooms }}
-				li#room-name.room-name
+				li.room-name(id="room-{{ id }}")
 					a(href="/rooms/{{ id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadChat:{{ . }}") {{ name }}
 				{{ /each}}
 				li#new-room
