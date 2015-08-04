@@ -14,9 +14,9 @@ var RoomMessagesComponent = Ractive.extend({
 	},
 
 	oninit: function() {
-		this.root.observe('activeRoom', this.getRoomMessages, { context: this });
+		this.parent.observe('chat', this.getMessages, { context: this });
 
-		this.root.socket.on('joined', this.joinedEvent.bind(this));
+		// this.root.socket.on('joined', this.joinedEvent.bind(this));
 		this.root.socket.on('message', this.messageEvent.bind(this));
 	},
 
@@ -25,21 +25,15 @@ var RoomMessagesComponent = Ractive.extend({
 		messagesContainer.addEventListener('scroll', this.handleScrolling.bind(this));
 	},
 
-	getRoomMessages: function(room, oldRoom, keypath) {
-		if (!room) return;
+	getMessages: function(chat, previousChat, keypath) {
+		if (!chat || chat === previousChat) return;
 
-		var url = "/rooms/" + room.id + "/messages";
+		var url = event.target.href + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
-			var messages = this.get('messages');
 			this.set('messages', response.body);
 			this.scrollToBottom();
 		}, this));
-	},
-
-	joinedEvent: function(data) {
-		// var messages = this.get('messages');
-		// messages.push(data);
 	},
 
 	scrollToBottom: function() {

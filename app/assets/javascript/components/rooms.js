@@ -56,12 +56,17 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	loadRoom: function(event, room) {
+		event.original.preventDefault();
+
+		var currentRoom = this.get('activeRoom');
+		if (currentRoom === room) return;
+
 		var title = "Huddle .:. " + room.name;
 		document.title = title;
 		history.pushState({ room: room, title: title }, room.name, event.node.href);
 
 		this.set('activeRoom', room);
-		event.original.preventDefault();
+		this.root.socket.emit('join', { roomId: room.id });
 	},
 
 	newRoom: function(event) {

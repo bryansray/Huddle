@@ -2,7 +2,6 @@ var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash'),
 		io = require('socket.io-client'),
-		// socket = io('http://localhost:3000', { query: "userId=1234" }),
 		helpers = require('./helpers');
 
 var RoomsComponent = require('./components/rooms'),
@@ -27,9 +26,8 @@ var ChatInputComponent = Ractive.extend({
 
 	messageSubmit: function() {
 		var message = this.get('input'),
-				room = this.parent.get('activeRoom');
+				room = this.parent.get('chat');
 		this.root.socket.emit('message', { userId: this.root.get('current_user.id'), roomId: room.id, message: message });
-		// this.scrollToTop();
 	},
 
 	handleTyping: function(event) {
@@ -93,7 +91,9 @@ var ChatComponent = Ractive.extend({
 	},
 
 	loadChat: function(event, chat) {
-		console.log("Load chat: ", chat);
+		var currentChat = this.get('chat');
+		if (currentChat === chat) return;
+
 		this.set('chat', chat);
 	}
 });
@@ -127,7 +127,7 @@ var huddle = new Ractive({
 		
 		var roomsComponent = this.findComponent('Rooms');
 		
-		roomsComponent.observe('activeRoom', this.activateRoom, { context: this });
+		// roomsComponent.observe('activeRoom', this.activateRoom, { context: this });
 	},
 
 	// CONNECT : Should we request the current_user?

@@ -39,14 +39,14 @@ block content
 			div.room-header-inner.header-inner
 				//- i.fa.fa-lock.fa-2x
 				div.page-header-main
-					h3 {{ activeRoom.name }}
-					p {{ activeRoom.description }}
+					h3 {{ chat.name }}
+					p {{ chat.description }}
 		section#room-container.flexbox.room-container
 			div#chat-message-area.flexitem.chat-message-area
-				<Messages/>
+				<Messages />
 
 			div#sidebar-right.flexitem.sidebar-right
-				<Users>
+				<Users />
 
 	script#message-template(type='text/ractive')
 		header.message-header.header
@@ -56,7 +56,7 @@ block content
 					h3 {{ chat.user.displayName }}
 		section#message-container.flexbox.room-container
 			div#chat-message-area.flexitem.chat-message-area
-				<Messages/>
+				<Messages />
 
 	script#room-users-template(type='text/ractive')
 		div#chat-users.users
@@ -68,7 +68,7 @@ block content
 	script#room-user-template(type='text/ractive')
 		li.user-information
 			div.user-metadata
-				a(href='/chat/user/{{ id }}' on-click="privateMessage:{{ user }}")
+				a(href='/chat/users/{{ id }}' on-click="privateMessage:{{ user }}")
 					i.fa.fa-circle(class="{{ status }}")
 					| {{ displayName }}
 
@@ -79,17 +79,17 @@ block content
 					{{ #each messages:i }}
 					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}{{ _.pluck(tags, 'name').join(' ') }} {{ user.id === ~/current_user.id ? 'current-user' : '' }}")
 						div#chat-username.flexitem.username 
-							{{ #if messages.length > 0 && (i === 0 || !previousMessageFromCurrentUser(messages[i - 1].user.id, user.id)) }}
+							{{ #if i < 1 || messages[i - 1] && !previousMessageFromCurrentUser(messages[i - 1].user.id, user.id) }}
 							{{ user.displayName }}
 							{{ /if }}
 						div#chat-message.flexitem.message {{{ html }}}
 						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(created_at) }}") {{ formatTime(created_at) }}
 					{{ /each }}
-		<ChatInput />
+		<ChatInput url="/rooms/{{ chat.id }}/messages" />
 		
 	script#chat-input-template(type='text/ractive')
 		div#chat-input-area.flexitem.chat-input-container
-			form(action='/rooms/1/messages' method='POST' on-submit="messageSubmit")
+			form(action='{{ url }}' method='POST' on-submit="messageSubmit")
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ input }}", on-keypress="typing" on-keydown-input="set('input', event.node.value)")
 
 	script#new-room-template(type='text/ractive')
