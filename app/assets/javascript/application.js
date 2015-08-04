@@ -13,7 +13,6 @@ var ChatInputComponent = Ractive.extend({
 
 	data: function() {
 		return {
-			currentHistoryIndex: undefined,
 			input: ""
 		};
 	},
@@ -54,17 +53,43 @@ var ChatInputComponent = Ractive.extend({
 			this.messageSubmit();
 			this.clearMessage();
 		} else if (event.original.keyCode === 38 && event.original.metaKey === true) {
-			var currentHistoryIndex = this.get('currentHistoryIndex')
 			var history = JSON.parse(sessionStorage.getItem('messages'));
+			if (!history) return;
 
+			var currentHistoryIndex = this.get('currentHistoryIndex')
+			
 			if (currentHistoryIndex === undefined || currentHistoryIndex < 0) {
 				currentHistoryIndex = history.length - 1;
 				this.set('currentHistoryIndex', currentHistoryIndex);
+			} else {
+				currentHistoryIndex = currentHistoryIndex - 1;
 			}
+
+			console.log("currentHistoryIndex (up): ", currentHistoryIndex);
 
 			var message = history[currentHistoryIndex];
 			
-			this.subtract('currentHistoryIndex')
+			this.set('currentHistoryIndex', currentHistoryIndex);
+			this.clearMessage();
+			this.set('input', message);
+		} else if (event.original.keyCode === 40 && event.original.metaKey === true) {
+			var history = JSON.parse(sessionStorage.getItem('messages'));
+			if (!history) return;
+
+			var currentHistoryIndex = this.get('currentHistoryIndex');
+			
+			if (currentHistoryIndex === undefined || currentHistoryIndex >= history.length) {
+				currentHistoryIndex = 0;
+				this.set('currentHistoryIndex', currentHistoryIndex);
+			} else {
+				currentHistoryIndex = currentHistoryIndex + 1;
+			}
+
+			console.log("currentHistoryIndex (down): ", currentHistoryIndex);
+
+			var message = history[currentHistoryIndex];
+
+			this.set('currentHistoryIndex', currentHistoryIndex);
 			this.clearMessage();
 			this.set('input', message);
 		}
