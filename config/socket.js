@@ -58,6 +58,18 @@ module.exports = function(server) {
 				});
 		});
 
+		// DISCONNECT EVENT
+		socket.on('disconnect', function(data) {
+			console.log("Disconnecting: ", data);
+			io.sockets.emit('quit', { userId: 1 });
+		});
+
+		// PART EVENT
+		socket.on('part', function(data) {
+			console.log("part: ", data);
+			socket.leave(data.id);
+		});
+
 		// MESSAGE (RECEIVED) EVENT
 		socket.on('message', function(data) {
 			var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
