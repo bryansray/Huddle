@@ -1,3 +1,4 @@
+
 // @import 'compass/reset';
 @import 'bourbon';
 @import 'compass/css3/border-radius';
@@ -191,11 +192,14 @@ body {
 }
 
 .users-list {
-  display: flex;
-  flex-direction: column;
-
   a {
     color: #333;
+    display: block;
+    padding: 2px 8px;
+  }
+
+  .fa.fa-circle {
+    color: #65e265;
   }
 }
 
@@ -222,23 +226,38 @@ body {
   padding: 0;
 
   > li {
+    @include clearfix;
+
     list-style: none;
     margin: 0;
-  }
-
-  a {
-    display: block;
-    line-height: 1.1rem;
-    overflow: hidden;
-    padding: 9px 30px 10px 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: break-word;
 
     &.active {
       background-color: #2472ad;
-      color: $white;
+
+      a {
+        color: $white;
+      }
     }
+
+    &.room:hover:not(.active) {
+      background-color: #d8d8d8;
+    }
+  }
+
+  li > a {
+    color: #5F5F5F;
+    display: inline-block;
+    line-height: 1.1rem;
+    overflow: hidden;
+    padding: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
+    width: 70%;
+  }
+
+  .actions {
+    text-align: center;
   }
 }
 
@@ -326,4 +345,58 @@ h6 {
 .form-group {
   line-height: 1.4rem;
   margin: .4rem 0;
+}
+
+
+.modal {
+  position: fixed;
+  font-family: Arial, Helvetica, sans-serif;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 99999;
+  opacity:0;
+  -webkit-transition: opacity 400ms ease-in;
+  -moz-transition: opacity 400ms ease-in;
+  transition: opacity 400ms ease-in;
+  pointer-events: none;
+}
+
+.modal:target {
+  opacity:1;
+  pointer-events: auto;
+}
+
+.modal > div {
+  width: 400px;
+  position: relative;
+  margin: 10% auto;
+  padding: 5px 20px 13px 20px;
+  border-radius: 10px;
+  background: #fff;
+  background: -moz-linear-gradient(#fff, #999);
+  background: -webkit-linear-gradient(#fff, #999);
+  background: -o-linear-gradient(#fff, #999);
+}
+
+.hide {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.flex {
+  @include display(flex);
+
+  .flexitem {
+    @include flex(1);
+  }
+
+  .flex-8 {
+    @include flex(8);
+  }
 }
