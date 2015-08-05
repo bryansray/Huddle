@@ -3,10 +3,57 @@ var Ractive = require('ractive'),
 		_ = require('lodash');
 
 var NewRoomComponent = Ractive.extend({
+	el: '#huddle-app',
+	append: true,
 	template: '#new-room-template',
+
+	data: function() {
+		return { name: "", description: "" };
+	},
 
 	oninit: function() {
 		console.log("Initializing NewRoomComponent ...");
+
+		this.on("createRoom", this.createRoom);
+	},
+
+	createRoom: function(event) {
+		console.log("Creating Room: ", this.get());
+
+		var data = this.get();
+
+		superagent.post('/rooms').send(data).end(function(status, response) {
+			console.log("response: ", response);
+
+			this.parent.push('rooms', response.body);
+		}.bind(this));
+
+		return false;
+	}
+});
+
+var RoomComponent = Ractive.extend({
+	template: "#sidebar-room-template",
+
+	data: function() {
+		return {};
+	},
+
+	oninit: function() {
+		console.log("Initializing RoomComponent");
+
+		this.on('activateRoom', this.activateRoom);
+		this.on('closeRoom', this.closeRoom);
+	},
+
+	activateRoom: function(event, room) {
+		event.original.preventDefault();
+
+		console.log("activate room: ", room);
+	},
+
+	closeRoom: function(event, room) {
+		this.root.socket.emit('part', room);
 	}
 });
 
@@ -18,6 +65,11 @@ var RoomsComponent = Ractive.extend({
 			rooms: [],
 			activeRoom: null
 		};
+	},
+
+	components: { 
+		NewRoom: NewRoomComponent,
+		Room: RoomComponent
 	},
 
 	onconstruct: function() {
@@ -36,14 +88,18 @@ var RoomsComponent = Ractive.extend({
 	oninit: function() { 
 		console.log("Initializing RoomsComponent.");
 		
-		this.on('loadChat', this.loadRoom);
+		this.on('Room.activateRoom', this.loadRoom);
+		this.on('Room.closeRoom', this.removeRoom);
+		// this.on('loadChat', this.loadRoom);
 		this.on('newRoom', this.newRoom);
 
 		this.observe('activeRoom', this.activateRoom);
 
 		window.onpopstate = _.bind(function(event) {
-			if (!event.state && !event.state.room) return;
 			console.log("popstate: ", event.state);
+
+			if (event.state === null) return;
+			if (event.state.room === null) return;
 
 			var rooms = this.get('rooms'),
 					room = _.find(rooms, function(room) { return room.id === event.state.room.id });
@@ -78,11 +134,19 @@ var RoomsComponent = Ractive.extend({
 		this.set('activeRoom', room);
 	},
 
+	removeRoom: function(event, room) {
+		event.original.preventDefault();
+
+		var index = _.findIndex(this.get('rooms'), 'id', room.id);	
+		this.splice('rooms', index, 1);
+	},
+
 	newRoom: function(event) {
-		var newRoom = NewRoomComponent({
-			el: '#huddle-app',
-			append: true
-		});
+		// var foo = this.findComponent('NewRoom');
+		var newRoom = new NewRoomComponent(); //this.findComponent('NewRoom');
+		// console.log("newRoom: ", foo);
+		// newRoom.render();
+		newRoom.parent = this;
 	}
 });
 

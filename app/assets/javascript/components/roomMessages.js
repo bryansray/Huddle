@@ -30,7 +30,10 @@ var RoomMessagesComponent = Ractive.extend({
 
 		// var url = event.target.href + "/messages"; 
 		// TODO : Where do I get this from? I no longer have the event.target.href :(
-		var url = "/rooms/" + chat.id + "/messages";
+		var url;
+
+		if (chat.id) url = "/rooms/" + chat.id + "/messages";
+		else url = "/chat/users/" + chat.user.id + "/messages";
 
 		superagent.get(url).end(_.bind(function(status, response) {
 			this.set('messages', response.body);
@@ -57,6 +60,7 @@ var RoomMessagesComponent = Ractive.extend({
 		var messages = this.get('messages');
 		messages.push(data);
 
+		debugger;
 		if (this._scrollPercentage() >= 98) this.scrollToBottom();
 	},
 

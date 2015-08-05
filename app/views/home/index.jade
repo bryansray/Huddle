@@ -91,17 +91,19 @@ block content
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ input }}", on-keydown-input-change="typing")
 
 	script#new-room-template(type='text/ractive')
-		div#new-room-container
-			h4 Create a New Room
+		div#new-room-container.modal
+			div
+				section
+					h4 Create a New Room
 
-			form(action="/rooms" method="POST")
-				div.form-group
-					label(for="name") Name
-					input(type="text" placeholder="")
-				div.form-group
-					label(for="description") Description
-					input(type="text")
-				button(type="submit") Create Room
+				form(action="/rooms" method="POST" on-submit="createRoom")
+					div.form-group
+						label(for="name") Name
+						input(type="text" placeholder="" value="{{ name }}")
+					div.form-group
+						label(for="description") Description
+						input(type="text" value="{{ description }}")
+					button(type="submit") Create Room
 
 	script#conversations-template(type='text/ractive')
 		section#conversations-container.conversations-wrapper
@@ -113,16 +115,21 @@ block content
 					a(href="/chat/users/{{ user.id }}", class="{{ this === active ? 'active' : '' }}" on-click="loadChat:{{ . }}") {{ user.displayName }}
 				{{ /each }}
 
+	script#sidebar-room-template(type='text/ractive')
+		li.flex.room(id="room-{{ room.id }}" class="{{ room === activeRoom ? 'active' : '' }}" on-mouseover="set('room.hover', true)" on-mouseout="set('room.hover', false)")
+			a.flexitem-8(href="/rooms/{{ room.id }}" on-click="activateRoom:{{ room }}") {{ room.name }}
+			a.flexitem.actions(href="#" title="Leave Room" on-click="closeRoom:{{ room }}" class="{{ room.hover ? '' : 'invisible' }}")
+				i.fa.fa-times
+
 	script#rooms-template(type='text/ractive')
 		div#active-rooms.rooms-wrapper
 			ul#rooms-container.rooms-container.sidebar-nav
 				li.sidebar-heading 
 					strong Rooms
 				{{ #each rooms }}
-				li.room-name(id="room-{{ id }}")
-					a(href="/rooms/{{ id }}", class="{{ this === activeRoom ? 'active' : '' }}", on-click="loadChat:{{ . }}") {{ name }}
+				<Room room="{{ . }}" />
 				{{ /each}}
 				li#new-room
-					a(href='#' on-click="newRoom") 
+					a(href='#new-room-container' on-click="newRoom") 
 						i.fa.fa-plus
 						|  New Room

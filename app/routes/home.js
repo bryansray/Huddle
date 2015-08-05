@@ -39,6 +39,7 @@ module.exports = function(app, passport) {
 		.post(rooms.create);
 
 	app.route('/rooms/:id').get(rooms.show);
+	app.route('/chat/users/:id').get(rooms.show);
 
 	// Messages
 	app.route('/rooms/:roomId/messages').get(messages.index);
