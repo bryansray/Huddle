@@ -182,6 +182,8 @@ var huddle = new Ractive({
 		this.socket = io.connect('http://localhost:3000', { query: "userId=" + window._currentUserId });
 		this.socket.on('connect', _.bind(this.onConnect, this.socket, this));
 		this.socket.on('error', _.bind(this.onError, this.socket, this));
+		this.socket.on('disconnect', this.onDisconnect);
+		this.socket.on('quit', this.onQuit);
 	},
 
 	oncomplete: function() {
@@ -196,5 +198,8 @@ var huddle = new Ractive({
 		});
 	},
 
-	onError: function() { console.log("OnError: ", arguments); }
+	onError: function() { console.log("OnError: ", arguments); },
+
+	onDisconnect: function() { console.log("Disconnect: ", arguments); },
+	onQuit: function() { console.log("Quit: ", arguments); }
 });
