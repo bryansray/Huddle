@@ -13,12 +13,12 @@ var socket = require('./config/socket')(server);
 
 exports = module.exports = app;
 
-console.log("--");
-console.log(chalk.green(config.app.title + ' application started.'));
-console.log(chalk.green('Environment: \t' + process.env.NODE_ENV));
-console.log(chalk.green('Port: \t\t' + config.port));
-console.log(chalk.green('Database: \t' + config.db.uri));
-console.log("--");
+console.log("\r\n");
+console.log(chalk.green(config.app.title + ' running ...\r\n'));
+console.log(chalk.green('Environment:') + '\t' + process.env.NODE_ENV);
+console.log(chalk.green('Port:') + '\t\t' + config.port);
+console.log(chalk.green('Database:') + '\t' + config.db.uri);
+console.log("\r\n");
 
 // // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
