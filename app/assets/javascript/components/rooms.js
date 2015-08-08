@@ -48,8 +48,6 @@ var RoomComponent = Ractive.extend({
 
 	activateRoom: function(event, room) {
 		event.original.preventDefault();
-
-		console.log("activate room: ", room);
 	},
 
 	closeRoom: function(event, room) {
@@ -75,7 +73,7 @@ var RoomsComponent = Ractive.extend({
 	onconstruct: function() {
 		console.log("Constructing RoomsComponent.");
 		
-		superagent.get('/rooms', _.bind(function(data, response) {
+		superagent.get('/user/participating', _.bind(function(data, response) {
 			this.set('rooms', response.body);
 
 			if (typeof _preloadedRoomId !== 'undefined') {
@@ -115,7 +113,7 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	activateRoom: function(room, previousRoom, keypath) {
-		if (room === null || room === previousRoom) return;
+		if (room === null || room === undefined || room === previousRoom) return;
 
 		this.root.socket.emit('join', { roomId: room.id });
 
@@ -137,7 +135,7 @@ var RoomsComponent = Ractive.extend({
 	removeRoom: function(event, room) {
 		event.original.preventDefault();
 
-		var index = _.findIndex(this.get('rooms'), 'id', room.id);	
+		var index = _.findIndex(this.get('rooms'), 'id', room.id);
 		this.splice('rooms', index, 1);
 	},
 
