@@ -2,7 +2,8 @@ var home = require('../controllers/home'),
 		rooms = require('../controllers/rooms'),
 		users = require('../controllers/users'),
 		messages = require('../controllers/messages'),
-		sessions = require('../controllers/sessions');
+		sessions = require('../controllers/sessions'),
+		participants = require('../controllers/participants');
 
 module.exports = function(app, passport) {
 	var ensureAuthenticated = function(req, res, next) {
@@ -40,6 +41,9 @@ module.exports = function(app, passport) {
 
 	app.route('/rooms/:id').get(rooms.show);
 	app.route('/chat/users/:id').get(rooms.show);
+
+	// Participants
+	app.route('/user/participating').get(participants.index);
 
 	// Messages
 	app.route('/rooms/:roomId/messages').get(messages.index);
