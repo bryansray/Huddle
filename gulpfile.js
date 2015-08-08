@@ -8,7 +8,8 @@ var gulp = require('gulp'),
 		mocha = require('gulp-mocha'),
 		bourbon = require('node-bourbon'),
 		plugins = require('gulp-load-plugins')({ rename: {
-				"gulp-ruby-sass": "sass"
+				"gulp-ruby-sass": "sass",
+				"gulp-util": "gutil"
 			}
 		});
 
@@ -76,14 +77,19 @@ gulp.task('clean', ['clean:stylesheets', 'clean:javascript', 'clean:fonts']);
 // *****************************************************************
 gulp.task('compile:javascript', function() {
 	gulp.src('app/assets/javascript/**/*.js')
-			.pipe(plugins.browserify(config.browserify))
+			.pipe(plugins.browserify(config.browserify)
+			.on('error', function(err) { 
+				plugins.gutil.beep(); 
+				plugins.gutil.log(err.stack);
+			}))
 			.pipe(gulp.dest('public/javascript'));
 });
 
 gulp.task('compile:stylesheets', function() {
 	return plugins.sass(config.sass.sassPath, config.sass.options)
 		.on('error', function(err) {
-			console.log("Error: ", err.message);
+			plugins.gutil.beep(); 
+			plugins.gutil.log(err.stack);
 		})
 		.pipe(plugins.autoprefixer())
 		.pipe(plugins.sourcemaps.write())
@@ -142,7 +148,7 @@ gulp.task('server', function() {
 // *****************************************************************
 // 
 // *****************************************************************
-gulp.task('watch', function() {
+gulp.task('watch', ['compile'], function() {
 	gulp.watch('app/assets/stylesheets/**/*.scss', ['lint:stylesheets', 'compile:stylesheets']);
 	gulp.watch('app/assets/javascript/**/*.js', [/*'lint:javascript', */'compile:javascript']);
 });
