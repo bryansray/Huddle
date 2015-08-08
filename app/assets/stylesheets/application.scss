@@ -36,6 +36,7 @@ body {
   background-color: #f5f5f5;
   border-right: 1px solid $grey;
   min-width: 150px;
+  flex: 1.2 0;
 }
 
 .scroll-wrapper {
@@ -48,7 +49,7 @@ body {
 }
 
 .chat-area {
-  flex: 12 0;
+  flex: 9 0;
 }
 
 .messages {
@@ -188,7 +189,7 @@ body {
 
 // Large screens
 @media all and (min-width: 800px) {
-  .sidebar-left { display: block; }
+  .sidebar-left { display: initial; }
 }
 
 .users-list {
