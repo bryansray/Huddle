@@ -75,10 +75,11 @@ module.exports = function(db) {
 
 	var pgSession = require('connect-pg-simple')(session);
 
+	// TODO : This needs to be pushed back in to the env/config
 	app.use(session({
 		store: new pgSession({
 			conString: {
-				database: 'huddle'
+				database: config.db.connection.database
 			}
 		}),
 		secret: "huddle_key",
