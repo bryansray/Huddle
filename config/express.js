@@ -78,9 +78,7 @@ module.exports = function(db) {
 	// TODO : This needs to be pushed back in to the env/config
 	app.use(session({
 		store: new pgSession({
-			conString: {
-				database: config.db.connection.database
-			}
+			conString: config.db.connection
 		}),
 		secret: "huddle_key",
 		cookie: { secure: false },
