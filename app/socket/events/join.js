@@ -14,8 +14,6 @@ module.exports = function(io, socket) {
 
 			var userIds = _channels[data.roomId].userIds;
 
-			console.log(_channels);
-
 			User.where({ id: currentUserId })
 				.fetch()
 				.then(function(user) {
