@@ -9,6 +9,10 @@ var User = require('../../models/user'),
 module.exports = function(io, socket) {
 
 	// MESSAGE (RECEIVED) EVENT
+	// 1. Check and add for new tags that need to be added
+	// 2. Check and add for any mentions that need to be added
+	// 3. Save message with all related data
+	// 4. Broadcast response back to all the connected clients
 	socket.on('message', function(data) {
 		var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
 				regexMentions = /(^|\s)(@[a-z\d_-]+)/ig;
