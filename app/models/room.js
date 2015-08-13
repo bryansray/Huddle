@@ -4,11 +4,14 @@ var Room = Bookshelf.Model.extend({
 	tableName: 'rooms',
 	
 	initialize: function() {
-		// console.log("Initializing Room ...");
 	},
 
 	messages: function() {
 		return this.hasMany('Message');
+	},
+
+	users: function() {
+		return this.belongsToMany('User').through('Participant');
 	}
 });
 

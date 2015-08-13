@@ -6,7 +6,6 @@ var Participant = Bookshelf.Model.extend({
 	hasTimestamps: true,
 
 	initialize: function() {
-		console.log("Loading Participant.");
 	},
 
 	rooms: function() {
