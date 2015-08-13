@@ -1,24 +1,32 @@
-var User = require('../../models/user');
+var _ = require('lodash');
 
-var _channels = {};
+var User = require('../../models/user');
+var Participants = require('../../models/participants');
 
 module.exports = function(io, socket) {
 		socket.on('join', function(data) {
-			var currentUserId = socket.handshake.query.userId;
+			var currentUserId = socket.handshake.query.userId,
+					roomId = data.roomId;
 
-			if (!_channels[data.roomId]) 
-				_channels[data.roomId] = { userIds: [] };
-			
-			if (!_channels[data.roomId].userIds.includes(currentUserId))
-				_channels[data.roomId].userIds.push(currentUserId);
+			var hotel = socket.hotel;
 
-			var userIds = _channels[data.roomId].userIds;
+			if (!hotel.has(roomId))
+				hotel.set(roomId, { participants: new Participants() });
 
 			User.where({ id: currentUserId })
 				.fetch()
 				.then(function(user) {
-					var room = { id: data.roomId };
+					var participant = user.toJSON()
+					hotel.checkin(currentUserId, roomId);
+
+					
+
+					return user;
+				})
+				.then(function(user) {
 					var joinedEventData = { users: [] };
+					
+					var userIds = hotel.get(roomId).participants.toArray();
 
 					User
 						.query(function(qb) {
@@ -27,15 +35,15 @@ module.exports = function(io, socket) {
 						.then(function(results) {
 							joinedEventData.users = results.toJSON();
 						}).then(function(results) {
-							joinedEventData.from_user = { displayName: "Huddle" };
-							joinedEventData.user = { firstName: user.get('firstName'), lastName: user.get('lastName'), displayName: user.get('displayName'), status: 'active', id: user.id };
-							joinedEventData.room = room;
+							// joinedEventData.from_user = { displayName: "Huddle" };
+							joinedEventData.user = user.toJSON();
+							// joinedEventData.room = { id: roomId };
 							// joinedEventData.message = message;
 							// joinedEventData.html = markdown.toHTML(message);
 							joinedEventData.timestamp = new Date();
 						}).done(function() {
-							socket.join(data.roomId);
-							io.sockets.in(data.roomId).emit('joined', joinedEventData);
+							socket.join(roomId);
+							io.sockets.in(roomId).emit('joined', joinedEventData);
 						});
 
 				})

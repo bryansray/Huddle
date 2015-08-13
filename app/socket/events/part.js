@@ -6,9 +6,9 @@ module.exports = function(io, socket) {
 		var currentUserId = socket.handshake.query.userId,
 				roomId = data.id;
 
-		// _channels[roomId].userIds.findIndex(function(element, index, array) {
-		// 	console.log(element, index, array);
-		// });
+		var hotel = socket.hotel;
+
+		hotel.checkout(currentUserId, roomId);
 
 		Participant.where( { user_id: currentUserId, room_id: roomId }).destroy();
 
