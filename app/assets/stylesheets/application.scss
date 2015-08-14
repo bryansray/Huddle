@@ -120,6 +120,10 @@ body {
   }
 }
 
+.rooms-wrapper {
+  margin-top: .4rem;
+}
+
 .mention {
   background-color: #fdfdd4;
   border: 1px solid #e2e28c;
@@ -399,5 +403,25 @@ h6 {
 
   .flex-8 {
     @include flex(8);
+  }
+}
+
+.lobby-header {
+  background-color: #f5f5f5;
+  min-height: 40px;
+  padding: 10px;
+}
+
+.available-chats i.fa {
+  margin: 0 .4rem;
+}
+
+.list-group {
+  .list-group-item {
+    border: 1px solid #ddd;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    text-decoration: none;
   }
 }
