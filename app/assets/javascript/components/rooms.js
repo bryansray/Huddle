@@ -153,8 +153,12 @@ var RoomsComponent = Ractive.extend({
 	removeRoom: function(event, room) {
 		event.original.preventDefault();
 
-		var index = _.findIndex(this.get('rooms'), 'id', room.id);
-		this.splice('rooms', index, 1);
+		// var index = _.findIndex(this.get('rooms'), 'id', room.id);
+		// this.splice('rooms', index, 1);
+		this.getParticipatingRooms();
+
+		if (this.get('activeRoom') === room)
+			this.set('activeRoom', null);
 	},
 
 	newRoom: function(event) {
