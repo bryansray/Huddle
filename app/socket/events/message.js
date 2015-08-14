@@ -15,12 +15,14 @@ module.exports = function(io, socket) {
 	// 4. Broadcast response back to all the connected clients
 	socket.on('message', function(data) {
 		var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
-				regexMentions = /(^|\s)(@[a-z\d_-]+)/ig;
+				regexMentions = /(^|\s)(@[a-z\d_-]+)/ig,
+				regexUrls = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})/ig;
 
 		var regexHashtagsReplace = "$1<span class=\"hash-tag\">$2</span>",
-				regexMentionsReplace = "$1<span class=\"mention\">$2</span>";
+				regexMentionsReplace = "$1<span class=\"mention\">$2</span>",
+				regexUrlReplace = "[$&]($&)";;
 
-		var message = data.message,
+		var message = data.message.replace(regexUrls, regexUrlReplace),
 				userId = data.currentUserId,
 				type = data.type,
 				toChatId = data.toChatId,
