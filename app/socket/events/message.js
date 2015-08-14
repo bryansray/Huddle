@@ -16,13 +16,17 @@ module.exports = function(io, socket) {
 	socket.on('message', function(data) {
 		var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
 				regexMentions = /(^|\s)(@[a-z\d_-]+)/ig,
-				regexUrls = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})/ig;
+				regexUrls = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})/ig,
+				regexImages = /^https?:\/\/(?:[a-z0-9\-]+\.)+[a-z]{2,6}(?:\/[^/#?]+)+\.(?:jpg|gif|png)$/ig;
 
 		var regexHashtagsReplace = "$1<span class=\"hash-tag\">$2</span>",
 				regexMentionsReplace = "$1<span class=\"mention\">$2</span>",
-				regexUrlReplace = "[$&]($&)";;
+				regexUrlReplace = "[$&]($&)",
+				regexImagesReplace = "![$&]($&)";
 
-		var message = data.message.replace(regexUrls, regexUrlReplace),
+		var message = data.message.match(regexImages) ? 
+					data.message.replace(regexImages, regexImagesReplace) : 
+					data.message.replace(regexUrls, regexUrlReplace),
 				userId = data.currentUserId,
 				type = data.type,
 				toChatId = data.toChatId,

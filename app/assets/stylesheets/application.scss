@@ -103,8 +103,10 @@ body {
   }
 
   a { color: #3566BF; }
-  a:hover { border-botom: 1px solid; }
-  
+  a:hover { border-bottom: 1px solid; }
+
+  img { display: inline-block; max-width: 100%; }
+
   p { margin: 0; }
   
   ul { 
