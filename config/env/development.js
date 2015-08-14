@@ -7,6 +7,10 @@ module.exports = {
 			password: '',
 			database: 'huddle_development',
 			charset: 'utf8'
-		}
+		},
+		pool: {
+	    min: 0,
+	    max: 10
+	  }
 	}
 };
