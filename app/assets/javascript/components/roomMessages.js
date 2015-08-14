@@ -16,7 +16,6 @@ var RoomMessagesComponent = Ractive.extend({
 	oninit: function() {
 		this.parent.observe('chat', this.getMessages, { context: this });
 
-		// this.root.socket.on('joined', this.joinedEvent.bind(this));
 		this.root.socket.on('message', this.messageEvent.bind(this));
 	},
 
@@ -55,8 +54,10 @@ var RoomMessagesComponent = Ractive.extend({
 	},
 
 	messageEvent: function(data) {
+		var chat = this.parent.get('chat');
+		if (chat.id !== data.room_id) return;
 		console.log("message received: ", data);
-
+		console.log("chat: ", this.parent.get('chat'));
 		var messages = this.get('messages');
 		messages.push(data);
 

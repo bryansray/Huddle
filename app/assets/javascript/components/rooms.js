@@ -71,25 +71,28 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	onconstruct: function() {
-		console.log("Constructing RoomsComponent.");
-		
-		superagent.get('/user/participating', _.bind(function(data, response) {
+
+	},
+
+	oninit: function() { 
+
+		superagent.get('/user/participating', function(data, response) {
 			this.set('rooms', response.body);
 
 			if (typeof _preloadedRoomId !== 'undefined') {
 				var room = _.find(response.body, function(room) { return room.id === _preloadedRoomId; });
 				this.set('activeRoom', room);
 			}
-		}, this));
-	},
+		}.bind(this));
 
-	oninit: function() { 
-		console.log("Initializing RoomsComponent.");
-		
+		this.root.on("Lobby.participateRoom", this.getParticipatingRooms.bind(this));
+		this.root.on("Lobby.participateRoom", this.loadRoom.bind(this));
+
 		this.on('Room.activateRoom', this.loadRoom);
 		this.on('Room.closeRoom', this.removeRoom);
-		// this.on('loadChat', this.loadRoom);
+
 		this.on('newRoom', this.newRoom);
+		this.on('loadLobby', this.loadLobby);
 
 		this.observe('activeRoom', this.activateRoom);
 
@@ -112,6 +115,12 @@ var RoomsComponent = Ractive.extend({
 		console.log("Completing RoomsComponent.");
 	},
 
+	getParticipatingRooms: function() {
+		superagent.get('/user/participating').end(function(err, response) {
+			this.merge('rooms', response.body);
+		}.bind(this));
+	},
+
 	activateRoom: function(room, previousRoom, keypath) {
 		if (room === null || room === undefined || room === previousRoom) return;
 
@@ -121,6 +130,15 @@ var RoomsComponent = Ractive.extend({
 		var title = "Huddle .:. " + room.name;
 		document.title = title;
 		history.pushState({ room: room, title: title }, room.name, "/rooms/" + room.id);
+	},
+
+	loadLobby: function(event, room) {
+		event.original.preventDefault();
+		var title = "Huddle .:. Lobby";
+		document.title = title;
+		history.pushState({ room: null, title: title }, "Huddle Lobby", "/chat/lobby");
+
+		this.set('activeRoom', null);
 	},
 
 	loadRoom: function(event, room) {
