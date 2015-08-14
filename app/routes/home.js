@@ -43,7 +43,8 @@ module.exports = function(app, passport) {
 
 	app.route('/rooms/:id').get(rooms.show);
 	app.route('/chat/users/:id').get(rooms.show);
-	app.route('/chat/lobby').get(rooms.show);
+	
+	app.route('/chat/lobby').get(home.index);
 
 	// Participants
 	app.route('/user/participating')
