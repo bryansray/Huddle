@@ -15,8 +15,8 @@ exports.up = function(knex, Promise) {
 		knex.schema.createTable('participants', function(table) {
 			table.increments().primary();
 
-			table.integer('user_id').references('users.id');
-			table.integer('room_id').references('rooms.id');
+			table.integer('user_id').notNullable().references('users.id');
+			table.integer('room_id').notNullable().references('rooms.id');
 
 			table.timestamps();
 		})
