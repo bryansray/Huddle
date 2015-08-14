@@ -25,12 +25,29 @@ block content
 				<Chat />
 	
 	script#chat-template(type='text/ractive')
+		{{ #if chat }}
 		section#chat-container
 			{{ #if chat.id }}
 			{{ >Room }}
 			{{ elseif chat.user }}
 			{{ >Message }}
 			{{ /if }}
+		{{ else }}
+		<Lobby/>
+		{{ /if }}
+
+	script#lobby-template(type='text/ractive')
+		section.lobby-container
+			header.lobby-header
+				input(type='text')
+			section.lobby-section
+				div.list-group.available-chats
+					{{ #each rooms}}
+					a.list-group-item.active(href="/user/participating" on-click="participateRoom:{{ . }}") 
+						i.fa.fa-comments-o
+						| {{ name }}
+					{{ /each }}
+
 
 	script#room-template(type='text/ractive')
 		header.room-header.header
@@ -124,6 +141,10 @@ block content
 	script#rooms-template(type='text/ractive')
 		div#active-rooms.rooms-wrapper
 			ul#rooms-container.rooms-container.sidebar-nav
+				li.flex.room
+					a.flexitem(href="/chat/lobby" on-click="loadLobby") 
+						i.fa.fa-bars(style="padding-right: 5px;")
+						| Lobby
 				li.sidebar-heading 
 					strong Rooms
 				{{ #each rooms }}

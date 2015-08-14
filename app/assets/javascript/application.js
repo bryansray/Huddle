@@ -8,6 +8,39 @@ var RoomsComponent = require('./components/rooms'),
 		MessagesComponent = require('./components/roomMessages'),
 		UsersComponent = require('./components/roomUsers');
 
+var LobbyComponent = Ractive.extend({
+	template: "#lobby-template",
+
+	data: function() {
+		return { 
+			rooms: [],
+			users: []
+		};
+	},
+
+	oninit: function() {
+		// Register Events
+		this.on('participateRoom', this.participateRoom);
+
+		// Load observables
+		superagent.get('/rooms', function(data, response) {
+			this.set('rooms', response.body);
+		}.bind(this));
+
+		superagent.get('/users', function(data, response) {
+			this.set('users', response.body);
+		}.bind(this));
+	},
+
+	participateRoom: function(event, room) {
+		event.original.preventDefault();
+
+		superagent.post(event.node.href).send(room).end(function(err, response) {
+			console.log(response.body);
+		}.bind(this));
+	}
+});
+
 var ChatInputComponent = Ractive.extend({
 	template: "#chat-input-template",
 
@@ -132,6 +165,7 @@ var ChatComponent = Ractive.extend({
 	},
 
 	components: {
+		Lobby: LobbyComponent,
 		Messages: MessagesComponent,
 		Users: UsersComponent,
 		ChatInput: ChatInputComponent
