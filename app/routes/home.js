@@ -31,7 +31,9 @@ module.exports = function(app, passport) {
 	app.route('/session').get(sessions.show);
 
 	// Users
-	app.route('/users').post(users.create);
+	app.route('/users')
+		.get(users.index)
+		.post(users.create);
 	app.route('/users/new').get(users.new);
 
 	// Rooms
@@ -41,9 +43,12 @@ module.exports = function(app, passport) {
 
 	app.route('/rooms/:id').get(rooms.show);
 	app.route('/chat/users/:id').get(rooms.show);
+	app.route('/chat/lobby').get(rooms.show);
 
 	// Participants
-	app.route('/user/participating').get(participants.index);
+	app.route('/user/participating')
+		.get(participants.index)
+		.post(participants.create);
 
 	// Messages
 	app.route('/rooms/:roomId/messages').get(messages.index);
