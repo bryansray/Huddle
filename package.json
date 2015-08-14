@@ -1,6 +1,6 @@
 {
-  "name": "construct",
-  "version": "0.0.0",
+  "name": "huddle",
+  "version": "0.8.0",
   "private": true,
   "dependencies": {
     "babel": "^5.1.11",
@@ -19,7 +19,7 @@
     "font-awesome": "^4.3.0",
     "globule": "^0.2.0",
     "gulp-autoprefixer": "^2.3.1",
-    "helmet": "^0.9.1",
+    "helmet": "^0.10.0",
     "jade": "^1.11.0",
     "jquery": "^2.1.4",
     "knex": "^0.8.6",
