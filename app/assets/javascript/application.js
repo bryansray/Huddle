@@ -213,7 +213,7 @@ var huddle = new Ractive({
 		
 		this.set('current_user', { id: window._currentUserId });
 
-		this.socket = io.connect('http://localhost:3000', { query: "userId=" + window._currentUserId });
+		this.socket = io.connect('', { query: "userId=" + window._currentUserId });
 		this.socket.on('connect', _.bind(this.onConnect, this.socket, this));
 		this.socket.on('error', _.bind(this.onError, this.socket, this));
 		this.socket.on('disconnect', this.onDisconnect);
