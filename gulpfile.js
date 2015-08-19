@@ -7,6 +7,10 @@ var gulp = require('gulp'),
 		babelify = require('babelify'),
 		mocha = require('gulp-mocha'),
 		bourbon = require('node-bourbon'),
+		neat = require('node-neat'),
+		argv = require('yargs')
+						.default('production', false)
+						.argv,
 		plugins = require('gulp-load-plugins')({ rename: {
 				"gulp-ruby-sass": "sass",
 				"gulp-util": "gutil"
@@ -21,17 +25,21 @@ require('jshint-stylish');
 var dir = requireDir('./lib/tasks');
 
 var config = {
+	paths: {
+		javascript: 'public/javascript'
+	},
+
 	sass: {
 		sassPath: './app/assets/stylesheets',
 		outputPath: './public/stylesheets',
 
 		options: {
-			sourcemap: true,
+			sourcemap: !argv.production,
 			compass: true,
 			verbose: true,
 			lineNumbers: true,
 
-			loadPath: ['./node_modules/font-awesome/scss', bourbon.includePaths],
+			loadPath: bourbon.includePaths.concat(neat.includePaths).concat(['./node_modules/font-awesome/scss']),
 		}
 	},
 
@@ -41,8 +49,9 @@ var config = {
 	},
 
 	browserify: { 
-		debug: true, 
+		debug: !argv.production, 
 		transform: [babelify],
+		insertGlobals: true,
 		paths: ['./node_modules', './app/assets/javascript']
 	},
 
@@ -76,13 +85,15 @@ gulp.task('clean', ['clean:stylesheets', 'clean:javascript', 'clean:fonts']);
 // Compilation Tasks
 // *****************************************************************
 gulp.task('compile:javascript', function() {
+	var handleErrors = function(err) { 
+		plugins.gutil.beep(); 
+		plugins.gutil.log(err.stack);
+	};
+
 	gulp.src('app/assets/javascript/**/*.js')
 			.pipe(plugins.browserify(config.browserify)
-			.on('error', function(err) { 
-				plugins.gutil.beep(); 
-				plugins.gutil.log(err.stack);
-			}))
-			.pipe(gulp.dest('public/javascript'));
+			.on('error', handleErrors))
+			.pipe(gulp.dest(config.paths.javascript));
 });
 
 gulp.task('compile:stylesheets', function() {
