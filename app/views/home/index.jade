@@ -13,6 +13,23 @@ block scripts
 block content
 	div#huddle-app
 
+	script#modal-template(type='text/ractive')
+		div.modal-background
+			div.modal-container
+				div.modal
+					header.header
+						h3 {{ title }}
+							a(href='#' on-click="close")
+								i.fa.fa-close.pull-right
+					
+					section.content
+						{{ >content }}
+
+					footer.footer
+						section.footer-actions
+							button.button.button-primary(type="submit" on-click="submit") Create room
+							button.button.button-link(on-click="close") Cancel
+
 	script#huddle-template(type='text/ractive')
 		div#huddle-app-container.flexbox.huddle-container
 			div#left-sidebar.flexitem.sidebar.sidebar-left
@@ -108,19 +125,26 @@ block content
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ input }}", on-keydown-input-change="typing")
 
 	script#new-room-template(type='text/ractive')
-		div#new-room-container.modal
-			div
-				section
-					h4 Create a New Room
-
-				form(action="/rooms" method="POST" on-submit="createRoom")
-					div.form-group
-						label(for="name") Name
-						input(type="text" placeholder="" value="{{ name }}")
-					div.form-group
-						label(for="description") Description
-						input(type="text" value="{{ description }}")
-					button(type="submit") Create Room
+		form.form-horizontal(action="/rooms" method="POST" on-submit="createRoom")
+			div.form-group
+				label(for="name") Name
+				input.form-control(type="text" placeholder="" value="{{ name }}" required autofocus)
+			div.form-group
+				label(for="description") Description
+				input.form-control(type="text" value="{{ description }}")
+			div.form-group
+				label Access
+				div.form-controls
+					div.radio
+						label 
+							input(type='radio' name="access" id="access-public" value="public" checked)
+							| Public
+						span.help-block Anyone can join this room and invite others.
+					div.radio
+						label
+							input(type='radio' name="access" id="access-public" value="private")
+							| Private
+						span.help-block Only people interested in this room may join.
 
 	script#conversations-template(type='text/ractive')
 		section#conversations-container.conversations-wrapper

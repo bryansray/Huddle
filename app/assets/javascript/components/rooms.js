@@ -2,33 +2,35 @@ var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash');
 
-var NewRoomComponent = Ractive.extend({
-	el: '#huddle-app',
-	append: true,
-	template: '#new-room-template',
+var Modal = require('./modal');
+
+var NewRoomComponent = Modal.extend(Modal, {
+	partials: { 
+		content: Ractive.parse( document.getElementById('new-room-template').innerHTML ) 
+	},
 
 	data: function() {
-		return { name: "", description: "" };
+		return { 
+			title: "Create a New Room"
+		};
 	},
 
 	oninit: function() {
 		console.log("Initializing NewRoomComponent ...");
 
-		this.on("createRoom", this.createRoom);
+		this.on('close', this.close);
+		this.on("submit", this.createRoom);
 	},
 
 	createRoom: function(event) {
 		console.log("Creating Room: ", this.get());
+		event.original.preventDefault();
 
-		var data = this.get();
+		// superagent.post('/rooms').send(data).end(function(status, response) {
+		// 	console.log("response: ", response);
 
-		superagent.post('/rooms').send(data).end(function(status, response) {
-			console.log("response: ", response);
-
-			this.parent.push('rooms', response.body);
-		}.bind(this));
-
-		return false;
+		// 	this.parent.push('rooms', response.body);
+		// }.bind(this));
 	}
 });
 
@@ -162,11 +164,13 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	newRoom: function(event) {
+		var modal = new NewRoomComponent({
+		});
 		// var foo = this.findComponent('NewRoom');
-		var newRoom = new NewRoomComponent(); //this.findComponent('NewRoom');
+		// var newRoom = new NewRoomComponent(); //this.findComponent('NewRoom');
 		// console.log("newRoom: ", foo);
 		// newRoom.render();
-		newRoom.parent = this;
+		// newRoom.parent = this;
 	}
 });
 

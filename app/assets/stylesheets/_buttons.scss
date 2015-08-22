@@ -1,0 +1,25 @@
+.button {
+	border: 0;
+	outline: none;
+	padding: 0.5rem 0.7rem;
+	font-family: "Open Sans";
+
+	&:hover {
+		cursor: pointer;		
+	}
+}
+
+.button-primary {
+	background-color: #2E69AB; 
+	color: #fff; 
+	font-weight: bold;
+}
+
+.button-link {
+	background-color: transparent;
+	color: #3566BF;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
