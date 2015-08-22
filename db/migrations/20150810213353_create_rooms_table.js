@@ -7,6 +7,8 @@ exports.up = function(knex, Promise) {
 			table.string('name');
 			table.string('description');
 
+			table.boolean('private').defaultTo(false);
+
 			table.timestamps();
 		}),
 		knex.insert({ name: "General Discussion", description: "General Discussion Room for the Team."}).into('rooms'),
