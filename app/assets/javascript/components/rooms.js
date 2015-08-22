@@ -2,7 +2,7 @@ var Ractive = require('ractive'),
 		superagent = require('superagent'),
 		_ = require('lodash');
 
-var Modal = require('./modal');
+var Modal = require('components/modal');
 
 var NewRoomComponent = Modal.extend(Modal, {
 	partials: { 
@@ -16,21 +16,31 @@ var NewRoomComponent = Modal.extend(Modal, {
 	},
 
 	oninit: function() {
-		console.log("Initializing NewRoomComponent ...");
-
 		this.on('close', this.close);
+		this.on('typing', this.typing);
+		this.on("create", this.create);
 		this.on("submit", this.createRoom);
 	},
 
+	typing: function(event) {
+		if (event.original.keyCode === 27) this.close();
+	},
+
+	create: function() {
+		this.find('form').submit();
+	},
+
 	createRoom: function(event) {
-		console.log("Creating Room: ", this.get());
 		event.original.preventDefault();
 
-		// superagent.post('/rooms').send(data).end(function(status, response) {
-		// 	console.log("response: ", response);
+		var data = { name: this.get('name'), description: this.get('description') };
 
-		// 	this.parent.push('rooms', response.body);
-		// }.bind(this));
+		superagent.post('/rooms').send(data).end(function(status, response) {
+			this.parent.push('rooms', response.body);
+			this.close();
+		}.bind(this));
+
+		return false;
 	}
 });
 
@@ -164,13 +174,8 @@ var RoomsComponent = Ractive.extend({
 	},
 
 	newRoom: function(event) {
-		var modal = new NewRoomComponent({
-		});
-		// var foo = this.findComponent('NewRoom');
-		// var newRoom = new NewRoomComponent(); //this.findComponent('NewRoom');
-		// console.log("newRoom: ", foo);
-		// newRoom.render();
-		// newRoom.parent = this;
+		var newRoom = new NewRoomComponent({});
+		newRoom.parent = this;
 	}
 });
 

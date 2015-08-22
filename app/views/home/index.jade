@@ -14,7 +14,7 @@ block content
 	div#huddle-app
 
 	script#modal-template(type='text/ractive')
-		div.modal-background
+		div.modal-background(on-keydown-input-change="typing")
 			div.modal-container
 				div.modal
 					header.header
@@ -27,7 +27,7 @@ block content
 
 					footer.footer
 						section.footer-actions
-							button.button.button-primary(type="submit" on-click="submit") Create room
+							button.button.button-primary(type="submit" on-click="create") Create room
 							button.button.button-link(on-click="close") Cancel
 
 	script#huddle-template(type='text/ractive')
@@ -125,7 +125,7 @@ block content
 				textarea#message-input.huddle-message-input(autofocus='true', value="{{ input }}", on-keydown-input-change="typing")
 
 	script#new-room-template(type='text/ractive')
-		form.form-horizontal(action="/rooms" method="POST" on-submit="createRoom")
+		form.form-horizontal(action="/rooms" method="POST" on-submit="submit")
 			div.form-group
 				label(for="name") Name
 				input.form-control(type="text" placeholder="" value="{{ name }}" required autofocus)
@@ -137,12 +137,12 @@ block content
 				div.form-controls
 					div.radio
 						label 
-							input(type='radio' name="access" id="access-public" value="public" checked)
+							input(type='radio' name="private" id="access-public" value="0" checked)
 							| Public
 						span.help-block Anyone can join this room and invite others.
 					div.radio
 						label
-							input(type='radio' name="access" id="access-public" value="private")
+							input(type='radio' name="private" id="access-private" value="1")
 							| Private
 						span.help-block Only people interested in this room may join.
 
@@ -175,6 +175,6 @@ block content
 				<Room room="{{ . }}" />
 				{{ /each}}
 				li#new-room
-					a(href='#new-room-container' on-click="newRoom") 
+					a(on-click="newRoom") 
 						i.fa.fa-plus
 						|  New Room
