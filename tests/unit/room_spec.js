@@ -7,8 +7,18 @@ var Room = require('../../app/models/room'),
 		User = require('../../app/models/user'),
 		Message = require('../../app/models/message');
 
-describe.skip("Room", function() {
-	describe("user management", function() {
+describe("Room", function() {
+	describe("validations", function() {
+		it("should not be valid if the room does not have a name", function() {
+			var room = new Room({ name: null });
+
+			var result = room.isValid();
+
+			result.should.be.false;
+		});
+	});
+
+	describe.skip("user management", function() {
 		it("should be able to add users to a room.", function() {
 			var user = new User();
 			var room = Room.forge({ name: "Room 1", description: "This is the room." }).related('users').attach(user);
@@ -61,7 +71,7 @@ describe.skip("Room", function() {
 		});
 	});
 
-	describe("message management", function() {
+	describe.skip("message management", function() {
 		it.skip("should be able to add a message to the channel", function() {
 			var room = new Room(),
 					user = new User(),

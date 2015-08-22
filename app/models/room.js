@@ -1,9 +1,15 @@
-var Bookshelf = require('../../config/bookshelf');
+var Bookshelf = require('../../config/bookshelf'),
+		validate = require('validate.js');
 
 var Room = Bookshelf.Model.extend({
 	tableName: 'rooms',
 	
 	initialize: function() {
+		this.on('saving', this.validate, this);
+	},
+
+	validations: {
+		name: { presence: true }
 	},
 
 	messages: function() {
@@ -12,6 +18,14 @@ var Room = Bookshelf.Model.extend({
 
 	users: function() {
 		return this.belongsToMany('User').through('Participant');
+	},
+
+	isValid: function() {
+		return validate(this.toJSON(), this.validations) === undefined;
+	},
+
+	validate: function(model, attrs, options) {
+		return validate(attrs, this.validations);
 	}
 });
 
