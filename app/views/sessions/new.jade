@@ -4,7 +4,7 @@ block content
 	div#login-template.container.login
 		h4 Huddle Login
 
-		form(action='/login' method='POST')
+		form.form-horizontal(action='/login' method='POST')
 			div.form-group
 				label Email
 				input(type='text' name='email' autofocus="true")
@@ -13,7 +13,7 @@ block content
 				label Password
 				input(type='password', name='password')
 
-			div.text-right
+			div
 				button(type='submit') Login
 
 		div.container.new-user
