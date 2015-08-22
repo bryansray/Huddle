@@ -1,25 +1,25 @@
 .button {
-	border: 0;
-	outline: none;
-	padding: 0.5rem 0.7rem;
-	font-family: "Open Sans";
+  border: 0;
+  font-family: 'Open Sans';
+  outline: none;
+  padding: .5rem .7rem;
 
-	&:hover {
-		cursor: pointer;		
-	}
+  &:hover {
+    cursor: pointer;    
+  }
 }
 
 .button-primary {
-	background-color: #2E69AB; 
-	color: #fff; 
-	font-weight: bold;
+  background-color: #2e69ab; 
+  color: #fff; 
+  font-weight: bold;
 }
 
 .button-link {
-	background-color: transparent;
-	color: #3566BF;
+  background-color: transparent;
+  color: #3566Bf;
 
-	&:hover {
-		text-decoration: underline;
-	}
+  &:hover {
+    text-decoration: underline;
+  }
 }

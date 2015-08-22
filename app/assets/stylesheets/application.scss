@@ -17,7 +17,10 @@ body {
   position: relative;
 }
 
-a { cursor: pointer; }
+a { 
+  cursor: pointer; 
+  text-decoration: none;
+}
 
 .huddle-container {
   border-bottom: 1px solid $grey; 
@@ -49,6 +52,16 @@ a { cursor: pointer; }
 
 .chat-area {
   flex: 9 0;
+
+  .header {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid $grey;
+    padding: 10px;
+
+    .header-inner {
+      height: 50px;
+    }
+  }
 }
 
 .messages {
@@ -97,14 +110,17 @@ a { cursor: pointer; }
     color: #999;
     font-size: smaller;
     font-weight: 100;
-    padding: 0 0.7rem 0 .5rem;
+    padding: 0 .7rem 0 .5rem;
     text-align: right; 
   }
 
-  a { color: #3566BF; }
+  a { color: #3566bf; }
   a:hover { border-bottom: 1px solid; }
 
-  img { display: inline-block; max-width: 100%; }
+  img { 
+    display: inline-block; 
+    max-width: 100%; 
+  }
 
   p { margin: 0; }
   
@@ -142,7 +158,6 @@ a { cursor: pointer; }
   background-color: #f0f8ff;
   border: 1px solid #cecece;
   border-radius: 3px;
-  // color: #949494;
   font-size: smaller;
   padding: 0 10px;
 }
@@ -248,9 +263,7 @@ a { cursor: pointer; }
     &.active {
       background-color: #2472ad;
 
-      a {
-        color: $white;
-      }
+      a { color: $white; }
     }
 
     &.room:hover:not(.active) {
@@ -259,15 +272,15 @@ a { cursor: pointer; }
   }
 
   li > a {
-    color: #5F5F5F;
+    color: #5f5f5f;
     display: inline-block;
     line-height: 1.1rem;
     overflow: hidden;
     padding: 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    word-wrap: break-word;
     width: 80%;
+    word-wrap: break-word;
   }
 
   .actions {
@@ -283,18 +296,6 @@ a { cursor: pointer; }
   height: 100%;
 }
 
-.chat-area {
-  header.header {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid $grey;
-    padding: 10px;
-
-    .header-inner {
-      height: 50px;
-    }
-  }
-}
-
 .room-header {
   background-color: #f5f5f5;
   border-bottom: 1px solid $grey;
@@ -305,10 +306,6 @@ a { cursor: pointer; }
   .room-header-inner {
     height: 50px;
   }
-}
-
-a {
-  text-decoration: none;
 }
 
 h1, 
@@ -322,7 +319,7 @@ h6 {
 
 
 .pull-right {
-  float: right !important;
+  float: right;
 }
 
 // LOGIN
@@ -341,7 +338,7 @@ h6 {
   box-shadow: 3px 3px #cecece;
   margin: 5rem auto;
   padding: 1rem;
-  width: 260px;  
+  width: 400px;  
 
   button {
     background-color: rgb(236, 236, 236);
@@ -366,11 +363,11 @@ h6 {
 }
 
 .hide {
-  display: none !important;
+  display: none;
 }
 
 .invisible {
-  visibility: hidden !important;
+  visibility: hidden;
 }
 
 .flex {
@@ -391,7 +388,7 @@ h6 {
   padding: 10px;
 }
 
-.available-chats i.fa {
+.available-chats .fa {
   margin: 0 .4rem;
 }
 
@@ -399,8 +396,8 @@ h6 {
   .list-group-item {
     border: 1px solid #ddd;
     display: block;
-    padding: 10px 15px;
     margin-bottom: -1px;
+    padding: 10px 15px;
     text-decoration: none;
   }
 }

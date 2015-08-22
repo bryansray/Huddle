@@ -1,53 +1,64 @@
+#{$all-text-inputs} {
+  border: 1px solid #cecece;
+  padding: .3rem;
+}
+
+#{$all-text-inputs-focus},
+#{$all-text-inputs-hover} {
+  border: 1px solid #0f0;
+}
+
+#{$all-text-inputs-active} {
+  border: 1px solid #00f;
+}
+
 input[type='text'] {
-	font-family: 'Open Sans', Tahoma, 'Trebuchet MS', Helvetica, sans-serif;
+  font-family: 'Open Sans', Tahoma, 'Trebuchet MS', Helvetica, sans-serif;
 }
 
 input[type='radio'] {
-	margin: 0 9px 0 0;
-	padding: 0;
+  margin: 0 9px 0 0;
+  padding: 0;
 }
 
 input:invalid {
-	box-shadow: none;
+  box-shadow: none;
 }
 
 .form-group {
-	@include display(flex);
+  @include display(flex);
 
-	margin-bottom: .4rem;
+  margin-bottom: .4rem;
 
-	label {
-		text-align: left;
-	}
+  label {
+    text-align: left;
+  }
 
-	input {
-
-	}
-
-	.form-control {
-		padding: .3rem;
-	}
+  .form-control {
+    padding: .3rem;
+  }
 }
 
 .radio {
-	margin: 10px 0;
+  margin: 10px 0;
 }
 
 .form-horizontal {
-	@include outer-container;
+  @include outer-container;
 
-	.form-group > label {
-		@include span-columns(3);
-	}	
+  .form-group > label {
+    @include span-columns(3);
+  } 
 
-	.form-group > input, .form-group > .form-controls {
-		@include span-columns(9);
-	}
+  .form-group > input, 
+  .form-group > .form-controls {
+    @include span-columns(9);
+  }
 }
 
 .help-block {
-	color: #737373;
-	display: block;
-	margin: 5px 0 10px 0;
-	font-style: italic;
+  color: #737373;
+  display: block;
+  font-style: italic;
+  margin: 5px 0 10px;
 }
