@@ -16,7 +16,7 @@ module.exports = function(io, socket) {
 	socket.on('message', function(data) {
 		var regexHashtags = /(^|\s)(#[a-z\d-]+)/ig,
 				regexMentions = /(^|\s)(@[a-z\d_-]+)/ig,
-				regexUrls = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})/ig,
+				regexUrls = /(^|)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi,
 				regexImages = /^https?:\/\/(?:[a-z0-9\-]+\.)+[a-z]{2,6}(?:\/[^/#?]+)+\.(?:jpg|gif|png)$/ig;
 
 		var regexHashtagsReplace = "$1<span class=\"hash-tag\">$2</span>",
