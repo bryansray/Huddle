@@ -8,7 +8,7 @@ var User = Bookshelf.Model.extend({
 	initialize: function() {
 		this.on('saving', function() { 
 			var password = this.get('password');
-			if (password && password.length > 6) {
+			if (password) {
 				this.set('salt', crypto.lib.WordArray.random(128/8).toString());
 				this.set('password', this.hashPassword(password));
 			}
