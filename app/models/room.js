@@ -3,7 +3,8 @@ var Bookshelf = require('../../config/bookshelf'),
 
 var Room = Bookshelf.Model.extend({
 	tableName: 'rooms',
-	
+	hasTimestamps: true,
+		
 	initialize: function() {
 		this.on('saving', this.validate, this);
 	},
