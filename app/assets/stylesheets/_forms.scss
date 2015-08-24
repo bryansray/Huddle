@@ -1,11 +1,15 @@
 #{$all-text-inputs} {
   border: 1px solid #cecece;
   padding: .3rem;
+  @include border-top-radius(5px);
+  @include border-right-radius(5px);
+  @include border-bottom-radius(5px);
+  @include border-left-radius(5px);
 }
 
 #{$all-text-inputs-focus},
 #{$all-text-inputs-hover} {
-  border: 1px solid #0f0;
+  border: 1px solid #b7b7b7;
 }
 
 #{$all-text-inputs-active} {
