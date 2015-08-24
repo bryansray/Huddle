@@ -87,7 +87,7 @@ var ChatInputComponent = Ractive.extend({
 			
 			this.messageSubmit();
 			this.clearMessage();
-		} else if (event.original.keyCode === 38 && event.original.metaKey === true) {
+		} else if (event.original.keyCode === 38 && (event.original.metaKey === true || event.original.ctrlKey === true)) {
 			var history = JSON.parse(sessionStorage.getItem('messages'));
 			if (!history) return;
 
@@ -104,7 +104,7 @@ var ChatInputComponent = Ractive.extend({
 			this.set('currentHistoryIndex', currentHistoryIndex);
 			this.clearMessage();
 			this.set('input', message);
-		} else if (event.original.keyCode === 40 && event.original.metaKey === true) {
+		} else if (event.original.keyCode === 40 && (event.original.metaKey === true || event.original.ctrlKey === true)) {
 			var history = JSON.parse(sessionStorage.getItem('messages'));
 			if (!history) return;
 
