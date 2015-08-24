@@ -18,7 +18,7 @@ var NewRoomComponent = Modal.extend(Modal, {
 	oninit: function() {
 		this.on('close', this.close);
 		this.on('typing', this.typing);
-		this.on("create", this.create);
+		// this.on("create", this.createRoom);
 		this.on("submit", this.createRoom);
 	},
 
