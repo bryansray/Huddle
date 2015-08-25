@@ -43,6 +43,7 @@ block content
 	
 	script#chat-template(type='text/ractive')
 		{{ #if chat }}
+		audio(id="sound-notification" src="/sounds/notification.mp3")
 		section#chat-container
 			{{ #if chat.id }}
 			{{ >Room }}
@@ -158,7 +159,11 @@ block content
 
 	script#sidebar-room-template(type='text/ractive')
 		li.flex.room(id="room-{{ room.id }}" class="{{ room === activeRoom ? 'active' : '' }}" on-mouseover="set('room.hover', true)" on-mouseout="set('room.hover', false)")
-			a.flexitem-8(href="/rooms/{{ room.id }}" on-click="activateRoom:{{ room }}") {{ room.name }}
+			a.room-name.flexitem(href="/rooms/{{ room.id }}" on-click="activateRoom:{{ room }}") {{ room.name }}
+			{{ #if missedMessages > 0 }}
+			a.flexitem.missed-messages
+				span.count {{ missedMessages }}
+			{{ /if }}
 			a.flexitem.actions(href="#" title="Leave Room" on-click="closeRoom:{{ room }}" class="{{ room.hover ? '' : 'invisible' }}")
 				i.fa.fa-times
 

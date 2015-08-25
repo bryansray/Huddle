@@ -48,11 +48,15 @@ var RoomComponent = Ractive.extend({
 	template: "#sidebar-room-template",
 
 	data: function() {
-		return {};
+		return {
+			missedMessages: 0
+		};
 	},
 
 	oninit: function() {
 		console.log("Initializing RoomComponent");
+
+		this.root.socket.on('message', this.messageReceived.bind(this));
 
 		this.on('activateRoom', this.activateRoom);
 		this.on('closeRoom', this.closeRoom);
@@ -60,10 +64,19 @@ var RoomComponent = Ractive.extend({
 
 	activateRoom: function(event, room) {
 		event.original.preventDefault();
+		this.set('missedMessages', 0);
 	},
 
 	closeRoom: function(event, room) {
 		this.root.socket.emit('part', room);
+	},
+
+	messageReceived: function(data) {
+		var roomId = this.get('room.id');
+		if (roomId === undefined || data.room_id !== roomId) return;
+
+		this.add('missedMessages');
+		console.log(data);
 	}
 });
 
@@ -171,6 +184,14 @@ var RoomsComponent = Ractive.extend({
 
 		if (this.get('activeRoom') === room)
 			this.set('activeRoom', null);
+	},
+
+	messageReceived: function(data) {
+		let activeRoom = this.get('activeRoom');
+		if (data.room_id === activeRoom.id) return;
+
+		let rooms = this.get('rooms');
+		let room = _.find(rooms, function(r) { return r.id === data.room_id });
 	},
 
 	newRoom: function(event) {

@@ -55,9 +55,14 @@ var RoomMessagesComponent = Ractive.extend({
 
 	messageEvent: function(data) {
 		var chat = this.parent.get('chat');
-		if (chat.id !== data.room_id) return;
-		console.log("message received: ", data);
-		console.log("chat: ", this.parent.get('chat'));
+		console.log("Message received: ", data);
+		if (chat.id !== data.room_id) {
+			document.getElementById('sound-notification').play();
+			return;
+		}
+
+		if (document.hidden) document.getElementById('sound-notification').play();
+
 		var messages = this.get('messages');
 		messages.push(data);
 
