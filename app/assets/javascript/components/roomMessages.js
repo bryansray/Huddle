@@ -55,7 +55,7 @@ var RoomMessagesComponent = Ractive.extend({
 
 	messageEvent: function(data) {
 		var chat = this.parent.get('chat');
-		console.log("Message received: ", data);
+
 		if (chat.id !== data.room_id) {
 			document.getElementById('sound-notification').play();
 			return;

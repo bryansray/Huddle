@@ -1,5 +1,3 @@
-var _ = require('lodash');
-
 var User = require('../../models/user');
 var Participants = require('../../models/participants');
 
@@ -35,11 +33,7 @@ module.exports = function(io, socket) {
 						.then(function(results) {
 							joinedEventData.users = results.toJSON();
 						}).then(function(results) {
-							// joinedEventData.from_user = { displayName: "Huddle" };
 							joinedEventData.user = user.toJSON();
-							// joinedEventData.room = { id: roomId };
-							// joinedEventData.message = message;
-							// joinedEventData.html = markdown.toHTML(message);
 							joinedEventData.timestamp = new Date();
 						}).done(function() {
 							socket.join(roomId);

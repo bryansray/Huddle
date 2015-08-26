@@ -31,13 +31,10 @@ var RoomUsersComponent = Ractive.extend({
 	},
 
 	onJoined: function(data) {
-		console.log("joined: ", data);
 		this.set('users', data.users);
 	},
 
-	onPart: function(data) {
-		console.log("part: ", data);
-		
+	onPart: function(data) {		
 		var index = _.findIndex(this.get('users'), 'id', data.userId);
 		this.splice('users', index, 1);
 	}

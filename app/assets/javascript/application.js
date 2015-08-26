@@ -5,194 +5,8 @@ var Ractive = require('ractive'),
 		helpers = require('./helpers');
 
 var RoomsComponent = require('./components/rooms'),
-		MessagesComponent = require('./components/roomMessages'),
-		UsersComponent = require('./components/roomUsers');
-
-var LobbyComponent = Ractive.extend({
-	template: "#lobby-template",
-
-	data: function() {
-		return { 
-			rooms: [],
-			users: []
-		};
-	},
-
-	oninit: function() {
-		// Register Events
-		this.on('participateRoom', this.participateRoom);
-
-		// Load observables
-		superagent.get('/rooms', function(data, response) {
-			this.set('rooms', response.body);
-		}.bind(this));
-
-		superagent.get('/users', function(data, response) {
-			this.set('users', response.body);
-		}.bind(this));
-	},
-
-	participateRoom: function(event, room) {
-		event.original.preventDefault();
-
-		superagent.post(event.node.href).send(room).end(function(err, response) {
-			console.log(response.body);
-		}.bind(this));
-	}
-});
-
-var ChatInputComponent = Ractive.extend({
-	template: "#chat-input-template",
-
-	data: function() {
-		return {
-			input: ""
-		};
-	},
-
-	oninit: function() {
-		console.log("Initializing ChatInputComponent.");
-
-		this.on('typing', this.handleTyping);
-		this.on('messageSubmit', this.messageSubmit);
-	},
-
-	messageSubmit: function() {
-		var message = this.get('input'),
-				currentUserId = this.root.get('current_user.id'),
-				chat = this.parent.get('chat'),
-				type,
-				toChatId;
-
-		if (chat.id) { toChatId = chat.id; type = "room" }
-		else { toChatId = chat.user.id; type = "user" }
-
-		this.set('currentHistoryIndex', undefined);
-
-		// TODO : Store separate history for specific room?
-		// TODO : possibly limit local storage to the last N messages?
-		if (!sessionStorage.getItem('messages')) sessionStorage.setItem('messages', JSON.stringify([]));
-
-		var history = JSON.parse(sessionStorage.getItem('messages'));
-		history.push(message);
-
-		sessionStorage.setItem('messages', JSON.stringify(history));
-
-		this.root.socket.emit('message', { currentUserId: currentUserId, type: type, toChatId: toChatId, message: message });
-	},
-
-	handleTyping: function(event) {
-		if (event.original.keyCode === 13 && event.original.shiftKey === false) {
-			event.original.preventDefault();
-			
-			this.messageSubmit();
-			this.clearMessage();
-		} else if (event.original.keyCode === 38 && (event.original.metaKey === true || event.original.ctrlKey === true)) {
-			var history = JSON.parse(sessionStorage.getItem('messages'));
-			if (!history) return;
-
-			var currentHistoryIndex = this.get('currentHistoryIndex')
-			
-			if (currentHistoryIndex === undefined || currentHistoryIndex < 0) {
-				currentHistoryIndex = history.length - 1;
-			} else {
-				currentHistoryIndex = currentHistoryIndex - 1;
-			}
-
-			var message = history[currentHistoryIndex];
-			
-			this.set('currentHistoryIndex', currentHistoryIndex);
-			this.clearMessage();
-			this.set('input', message);
-		} else if (event.original.keyCode === 40 && (event.original.metaKey === true || event.original.ctrlKey === true)) {
-			var history = JSON.parse(sessionStorage.getItem('messages'));
-			if (!history) return;
-
-			var currentHistoryIndex = this.get('currentHistoryIndex');
-			
-			if (currentHistoryIndex === undefined || currentHistoryIndex >= history.length) {
-				currentHistoryIndex = 0;
-			} else {
-				currentHistoryIndex = currentHistoryIndex + 1;
-			}
-
-			var message = history[currentHistoryIndex];
-
-			this.set('currentHistoryIndex', currentHistoryIndex);
-			this.clearMessage();
-			this.set('input', message);
-		}
-	},
-
-	clearMessage: function() {
-		this.set('input', '');
-	}
-});
-
-var ConversationsComponent = Ractive.extend({
-	template: "#conversations-template",
-
-	data: function() {
-		return { conversations: [], active: null };
-	},
-
-	oninit: function() {
-		console.log("Initializing ConversationsComponent.");
-
-		this.root.on('RoomUser.privateMessage', this.loadChat.bind(this));
-		this.on('loadChat', this.loadChat.bind(this));
-	},
-
-	loadChat: function(event, user) {
-		var conversations = this.get('conversations');
-		var exists = _.contains(_.pluck(conversations, 'id'), user.id);
-
-		var conversation = { user: user, messages: [] };
-		this.set('active', conversation);
-		
-		if (!exists)
-			conversations.push(conversation);
-
-		event.original.preventDefault();
-	}
-});
-
-var ChatComponent = Ractive.extend({
-	template: "#chat-template",
-
-	data: function() {
-		return { chat: null };
-	},
-
-	components: {
-		Lobby: LobbyComponent,
-		Messages: MessagesComponent,
-		Users: UsersComponent,
-		ChatInput: ChatInputComponent
-	},
-
-	partials: {
-		Room: document.getElementById('room-template').text,
-		Message: document.getElementById('message-template').text,
-	},
-
-	oninit: function() {
-		var rooms = this.parent.findComponent('Rooms');
-		var conversations = this.parent.findComponent('Conversations');
-
-		rooms.observe('activeRoom', this.loadChat.bind(this));
-		conversations.observe('active', this.loadChat.bind(this));
-
-		// this.parent.on('*.loadChat', this.loadChat.bind(this));
-	},
-
-	loadChat: function(chat, previousChat, keypath) {
-		var currentChat = this.get('chat');
-		if (currentChat === chat) return;
-
-		this.set('chat', chat);
-	}
-});
+		ConversationsComponent = require('./components/conversations'),
+		ChatComponent = require('./components/chat');
 
 var huddle = new Ractive({
 	el: '#huddle-app',
@@ -209,8 +23,6 @@ var huddle = new Ractive({
 	},
 
 	oninit: function() {
-		console.log("Initializing Huddle.");
-		
 		this.set('current_user', { id: window._currentUserId });
 
 		this.socket = io.connect('', { query: "userId=" + window._currentUserId });
@@ -218,10 +30,6 @@ var huddle = new Ractive({
 		this.socket.on('error', _.bind(this.onError, this.socket, this));
 		this.socket.on('disconnect', this.onDisconnect);
 		this.socket.on('quit', this.onQuit);
-	},
-
-	oncomplete: function() {
-		console.log("Huddle Complete.");
 	},
 
 	// CONNECT : Should we request the current_user?
