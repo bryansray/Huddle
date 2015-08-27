@@ -1,10 +1,23 @@
 var Bookshelf = require('../../config/bookshelf'),
+		validate = require('validate.js'),
 		crypto = require('crypto-js');
 
 var User = Bookshelf.Model.extend({
 	tableName: 'users',
 	hasTimestamps: true,
 	hidden: ['password', 'salt', 'resetPasswordToken', 'resetPasswordExpirationDate'],
+
+	validations: {
+		password: { presence: true }
+	},
+
+	isValid: function() {
+		return validate(this.attributes, this.validations) === undefined;
+	},
+
+	validate: function(model, attrs, options) {
+		return validate(attrs, this.validations);
+	},
 
 	initialize: function() {
 		this.on('saving', function() { 
