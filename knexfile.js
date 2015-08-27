@@ -1,16 +1,11 @@
 // Update with your config settings.
+var config = require('./config/config');
 
 module.exports = {
-
   development: {
-    client: 'postgresql',
+    client: config.db.client,
+    connection: config.db.connection,
     debug: true,
-    connection: {
-      host: '127.0.0.1',
-      user: 'bryanray',
-      password: '',
-      database: 'huddle_development'
-    },
     migrations: {
       directory: "db/migrations",
       tableName: "knex_migrations"

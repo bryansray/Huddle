@@ -24,6 +24,9 @@ require('jshint-stylish');
 // *****************************************************************
 var dir = requireDir('./lib/tasks');
 
+if (argv.production) process.env.NODE_ENV = 'production';
+if (argv.port) process.env.PORT = argv.port;
+
 var config = {
 	paths: {
 		javascript: 'public/javascript'
@@ -151,8 +154,7 @@ gulp.task('server', function() {
 	plugins.nodemon({
 		script: './app.js',
 		ignore: ['app/assets/', 'public', 'tests', 'bin', 'lib', 'node_modules', 'bower_components', '.git'],
-		ext: 'js html',
-		env: { 'NODE_ENV': 'development' }
+		ext: 'js html'
 	});
 });
 
