@@ -22,7 +22,7 @@ var Room = Bookshelf.Model.extend({
 	},
 
 	isValid: function() {
-		return validate(this.toJSON(), this.validations) === undefined;
+		return validate(this.attributes, this.validations) === undefined;
 	},
 
 	validate: function(model, attrs, options) {
