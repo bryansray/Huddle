@@ -3,6 +3,9 @@ var LocalStrategy = require('passport-local').Strategy,
 
 module.exports = function(app, config, passport) {
 	// Configure Passport
+	app.use(passport.initialize());
+	app.use(passport.session());
+
 	passport.use(new LocalStrategy({ usernameField: 'email' },
 		function(email, password, done) {
 			new User({ email: email}).fetch().then(function(user) {

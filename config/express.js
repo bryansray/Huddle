@@ -5,6 +5,8 @@ var globule = require('globule'),
 var path = require('path');
 var logger = require('morgan');
 var _ = require('lodash');
+var fs = require('fs');
+var mkdirp = require('mkdirp');
 
 var cookieParser = require('cookie-parser'),
 		favicon = require('serve-favicon'),
@@ -45,11 +47,20 @@ module.exports = function(db) {
 
 	// Compression (should be placed before express.static)
 
+	// Setup Logging
+	var loggingPath = 'logs';
+	mkdirp(loggingPath);
+	var accessLoggingStream = fs.createWriteStream(path.join(loggingPath, 'access.log'), { flags: 'a' });
+	var errorLoggingStream = fs.createWriteStream(path.join(loggingPath, 'error.log'), { flags: 'a' });
+
 	// Show stack errors
 	app.set('showStackError');
 
 	app.use(favicon('public/favicon.ico'));
+	app.use(logger('combined', { stream: accessLoggingStream }));
+	app.use(logger('combined', { stream: errorLoggingStream, skip: function(req, res) { return res.statusCode < 400; } }));
 	app.use(logger('dev'));
+
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 	
@@ -85,8 +96,6 @@ module.exports = function(db) {
 		resave: false,
 		saveUninitialized: false,
 	}));
-	app.use(passport.initialize());
-	app.use(passport.session());
 
 	require('./passport')(app, config, passport);
 
