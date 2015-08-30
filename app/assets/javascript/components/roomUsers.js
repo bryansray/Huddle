@@ -12,7 +12,7 @@ var RoomUsersComponent = Ractive.extend({
 		this.root.socket.on('part', this.onPart.bind(this));
 		this.root.socket.on('quit', this.onPart.bind(this));
 
-		var room = this.parent.get('room');
+		var room = this.get('chat');
 
 		if (room) {
 			// Get a list of active users in the channel.
@@ -31,6 +31,8 @@ var RoomUsersComponent = Ractive.extend({
 	},
 
 	onJoined: function(data) {
+		// TODO : This seems wrong ...
+		// if (data.roomId === this.get('chat.id'))
 		this.set('users', data.users);
 	},
 

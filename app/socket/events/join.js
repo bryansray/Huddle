@@ -17,8 +17,6 @@ module.exports = function(io, socket) {
 					var participant = user.toJSON()
 					hotel.checkin(currentUserId, roomId);
 
-					
-
 					return user;
 				})
 				.then(function(user) {
@@ -33,6 +31,7 @@ module.exports = function(io, socket) {
 						.then(function(results) {
 							joinedEventData.users = results.toJSON();
 						}).then(function(results) {
+							joinedEventData.roomId = roomId;
 							joinedEventData.user = user.toJSON();
 							joinedEventData.timestamp = new Date();
 						}).done(function() {

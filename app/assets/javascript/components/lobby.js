@@ -12,6 +12,9 @@ var LobbyComponent = Ractive.extend({
 	},
 
 	oninit: function() {
+		this.observe('req', (req) => {
+		});
+		
 		// Register Events
 		this.on('participateRoom', this.participateRoom);
 
@@ -32,5 +35,7 @@ var LobbyComponent = Ractive.extend({
 		}.bind(this));
 	}
 });
+
+LobbyComponent._name = 'Lobby';
 
 module.exports = LobbyComponent;

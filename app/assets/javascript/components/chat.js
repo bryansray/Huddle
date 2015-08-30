@@ -1,7 +1,6 @@
 var Ractive = require('ractive');
 
 var ChatInputComponent = require('components/chatInput');
-var LobbyComponent = require('components/lobby');
 var MessagesComponent = require('components/roomMessages');
 var UsersComponent = require('components/roomUsers');
 
@@ -13,7 +12,6 @@ var ChatComponent = Ractive.extend({
 	},
 
 	components: {
-		Lobby: LobbyComponent,
 		Messages: MessagesComponent,
 		Users: UsersComponent,
 		ChatInput: ChatInputComponent
@@ -25,21 +23,20 @@ var ChatComponent = Ractive.extend({
 	},
 
 	oninit: function() {
-		var rooms = this.parent.findComponent('Rooms');
-		var conversations = this.parent.findComponent('Conversations');
+		this.observe('req', (req) => {
+			this.set('chat', req.body.room);
+		});
 
-		rooms.observe('activeRoom', this.loadChat.bind(this));
-		conversations.observe('active', this.loadChat.bind(this));
+		var rooms = this.root.findComponent('Rooms');
 
-		// this.parent.on('*.loadChat', this.loadChat.bind(this));
+		rooms.observe('activeRoom', this.loadChat);
 	},
 
 	loadChat: function(chat, previousChat, keypath) {
-		var currentChat = this.get('chat');
-		if (currentChat === chat) return;
-
 		this.set('chat', chat);
 	}
 });
+
+ChatComponent._name = 'Chat';
 
 module.exports = ChatComponent;

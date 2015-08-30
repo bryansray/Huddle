@@ -1,4 +1,5 @@
-var Ractive = require('ractive');
+var Ractive = require('ractive'),
+		_ = require('lodash');
 
 var ConversationsComponent = Ractive.extend({
 	template: "#conversations-template",

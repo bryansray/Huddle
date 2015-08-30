@@ -5,11 +5,12 @@ module.exports = function(io, socket) {
 	socket.on('disconnect', function(data) {
 		var currentUserId = socket.handshake.query.userId;
 
-		for (var roomId in _channels)
-		{
-			var users = _channels[roomId].userIds;
-			_channels[roomId].userIds = _.remove(users, function(x) { return x === currentUserId });
-		}
+		var hotel = socket.hotel;
+
+		hotel.forEach(function(value, key) {
+			console.log(key);
+			hotel.checkout(currentUserId, key);
+		});
 
 		io.sockets.emit('quit', { userId: currentUserId });
 	});

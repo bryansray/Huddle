@@ -18,7 +18,7 @@ var NewRoomComponent = Modal.extend(Modal, {
 	oninit: function() {
 		this.on('close', this.close);
 		this.on('typing', this.typing);
-		// this.on("create", this.createRoom);
+
 		this.on("submit", this.createRoom);
 	},
 
@@ -62,6 +62,7 @@ var RoomComponent = Ractive.extend({
 
 	activateRoom: function(event, room) {
 		event.original.preventDefault();
+
 		this.set('missedMessages', 0);
 	},
 
@@ -94,12 +95,7 @@ var RoomsComponent = Ractive.extend({
 		Room: RoomComponent
 	},
 
-	onconstruct: function() {
-
-	},
-
-	oninit: function() { 
-
+	oninit: function() {
 		superagent.get('/user/participating', function(data, response) {
 			this.set('rooms', response.body);
 
@@ -120,17 +116,17 @@ var RoomsComponent = Ractive.extend({
 
 		this.observe('activeRoom', this.activateRoom);
 
-		window.onpopstate = _.bind(function(event) {
-			if (event.state === null) return;
-			if (event.state.room === null) return;
+		// window.onpopstate = function(event) {
+		// 	if (event.state === null) return;
+		// 	if (event.state.room === null) return;
 
-			var rooms = this.get('rooms'),
-					room = _.find(rooms, function(room) { return room.id === event.state.room.id });
+		// 	var rooms = this.get('rooms'),
+		// 			room = _.find(rooms, function(room) { return room.id === event.state.room.id });
 
-			document.title = event.state.title;
+		// 	document.title = event.state.title;
 
-			this.set('activeRoom', room);
-		}, this);
+		// 	this.set('activeRoom', room);
+		// }.bind(this);
 	},
 
 	getParticipatingRooms: function() {
@@ -145,16 +141,15 @@ var RoomsComponent = Ractive.extend({
 		this.root.socket.emit('join', { roomId: room.id });
 
 
-		var title = "Huddle .:. " + room.name;
-		document.title = title;
-		history.pushState({ room: room, title: title }, room.name, "/rooms/" + room.id);
+		// var title = "Huddle .:. " + room.name;
+		// document.title = title;
+		// history.pushState({ room: room, title: title }, room.name, url);
 	},
 
 	loadLobby: function(event, room) {
 		event.original.preventDefault();
-		var title = "Huddle .:. Lobby";
-		document.title = title;
-		history.pushState({ room: null, title: title }, "Huddle Lobby", "/chat/lobby");
+		var url = "/chat/lobby";
+		this.root.router.navigateTo(url);
 
 		this.set('activeRoom', null);
 	},
@@ -164,6 +159,9 @@ var RoomsComponent = Ractive.extend({
 
 		var currentRoom = this.get('activeRoom');
 		if (currentRoom === room) return;
+
+		var url = event.node.getAttribute("href");
+		this.root.router.navigateTo(url);
 
 		this.set('activeRoom', room);
 	},

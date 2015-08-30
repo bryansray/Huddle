@@ -39,20 +39,12 @@ block content
 					<Conversations />
 
 			div#chat-area-container.flexitem.chat-area
-				<Chat />
+				<Router componentName="{{ componentName }}" />
 	
 	script#chat-template(type='text/ractive')
-		{{ #if chat }}
 		audio(id="sound-notification" src="/sounds/notification.mp3")
 		section#chat-container
-			{{ #if chat.id }}
 			{{ >Room }}
-			{{ elseif chat.user }}
-			{{ >Message }}
-			{{ /if }}
-		{{ else }}
-		<Lobby/>
-		{{ /if }}
 
 	script#lobby-template(type='text/ractive')
 		section.lobby-container
@@ -159,7 +151,9 @@ block content
 
 	script#sidebar-room-template(type='text/ractive')
 		li.flex.room(id="room-{{ room.id }}" class="{{ room === activeRoom ? 'active' : '' }}" on-mouseover="set('room.hover', true)" on-mouseout="set('room.hover', false)")
-			a.room-name.flexitem(href="/rooms/{{ room.id }}" on-click="activateRoom:{{ room }}") {{ room.name }}
+			a.room-name.flexitem(href="/rooms/{{ room.id }}" on-click="activateRoom:{{ room }}") 
+				i.fa.fa-users 
+				| {{ room.name }}
 			{{ #if missedMessages > 0 }}
 			a.flexitem.missed-messages
 				span.count {{ missedMessages }}
