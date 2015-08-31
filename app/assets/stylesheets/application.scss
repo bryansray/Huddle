@@ -13,8 +13,7 @@ body {
   font-family: 'Open Sans', Tahoma, 'Trebuchet MS', Helvetica, sans-serif;
   font-size: 9pt;
   margin: 0;
-  // min-height: 100%;
-  position: relative;
+  height: 100%;
 }
 
 a { 
@@ -23,6 +22,7 @@ a {
 }
 
 .huddle-container {
+  @include display(flex);
   border-bottom: 1px solid $grey; 
   height: 100vh;
 
@@ -36,15 +36,12 @@ a {
 }
 
 .sidebar-left {
-  @include flex(1.2 0);
-
   background-color: #f5f5f5;
   border-right: 1px solid $grey;
 }
 
 .scroll-wrapper {
-  height: 86.5vh;
-  position: relative;
+  @include flex(1 0 auto);
 
   .chat-message-wrapper {
     // height: 400px; // TODO : This will be manipulated via some javascript
@@ -52,7 +49,15 @@ a {
 }
 
 .chat-area {
-  @include flex(7);
+  @include display(flex);
+  @include flex(5 0);
+  @include flex-direction(column);
+
+  .chat-container {
+    @include flex(1);
+    @include display(flex);
+    @include flex-direction(column);
+  }
 
   .header {
     background-color: #f5f5f5;
@@ -66,13 +71,10 @@ a {
 }
 
 .messages {
-  bottom: 0;
-  left: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  position: absolute;
-  right: 0;
-  top: 0;
+  @include flex(1 0 10px);
+  overflow: auto;
 }
 
 .message-container {
@@ -196,7 +198,11 @@ a {
 @media all {
   .sidebar-left { display: none; }
   .chat-area {
-    .chat-message-area { flex: 4 0; }
+    .chat-message-area { 
+      @include flex(3);
+      @include display(flex);
+      @include flex-direction(column);
+    }
     .sidebar-right { display: none; flex: 1 0; }
 
     .chat-message-wrapper { flex-direction: column; }
@@ -304,7 +310,7 @@ a {
 }
 
 .room-container {
-  // height: 100%;
+  @include flex(1);
 }
 
 .room-header {

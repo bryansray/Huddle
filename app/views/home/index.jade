@@ -43,7 +43,7 @@ block content
 	
 	script#chat-template(type='text/ractive')
 		audio(id="sound-notification" src="/sounds/notification.mp3")
-		section#chat-container
+		section#chat-container.chat-container
 			{{ >Room }}
 
 	script#lobby-template(type='text/ractive')
@@ -98,18 +98,16 @@ block content
 					| {{ displayName }}
 
 	script#chat-messages-template(type='text/ractive')
-		div.scroll-wrapper
-			div.flexbox.chat-message-wrapper
-				div#chat-messages.flexitem.messages
-					{{ #each messages:i }}
-					div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}{{ _.pluck(tags, 'name').join(' ') }} {{ user.id === ~/current_user.id ? 'current-user' : '' }}")
-						div#chat-username.flexitem.username 
-							{{ #if i < 1 || messages[i - 1] && !previousMessageFromCurrentUser(messages[i - 1].user.id, user.id) }}
-							{{ user.displayName }}
-							{{ /if }}
-						div#chat-message.flexitem.message {{{ html }}}
-						div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(created_at) }}") {{ formatTime(created_at) }}
-					{{ /each }}
+		div#chat-messages.flexitem.messages
+			{{ #each messages:i }}
+			div#chat-message-container.message-container.flexbox(class = "{{ from_user ? 'server-message' : '' }}{{ _.pluck(tags, 'name').join(' ') }} {{ user.id === ~/current_user.id ? 'current-user' : '' }}")
+				div#chat-username.flexitem.username 
+					{{ #if i < 1 || messages[i - 1] && !previousMessageFromCurrentUser(messages[i - 1].user.id, user.id) }}
+					{{ user.displayName }}
+					{{ /if }}
+				div#chat-message.flexitem.message {{{ html }}}
+				div#chat-timestamp.flexitem.timestamp(title="{{ timeAgoInWords(created_at) }}") {{ formatTime(created_at) }}
+			{{ /each }}
 		<ChatInput url="/rooms/{{ chat.id }}/messages" />
 		
 	script#chat-input-template(type='text/ractive')
