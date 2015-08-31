@@ -16,7 +16,7 @@ exports.init = function(routes, onNavigation) {
 		page(path, navigationHandler(handler, onNavigation));
 	});
 
-	page({ hashbang: false });
+	page();
 };
 
 exports.navigateTo = function(url) {
