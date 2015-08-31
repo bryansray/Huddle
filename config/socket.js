@@ -4,8 +4,7 @@ var	globule = require('globule'),
 var Hotel = require('../app/models/hotel');
 
 module.exports = function(server) {
-	var io = require('socket.io')(server),
-			markdown = require('markdown').markdown;
+	var io = require('socket.io')(server);
 
 	var hotel = new Hotel();
 
