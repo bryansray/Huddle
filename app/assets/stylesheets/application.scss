@@ -103,7 +103,7 @@ a {
     background-color: #dff1ff;
   }
 
-  .username { color: #707070; padding-right: 2rem; text-align: right; width: 110px; }
+  .username { color: #707070; padding-right: 2rem; text-align: right; }
   .message { 
     color: #515151;
     line-height: 1.4rem;
@@ -199,7 +199,7 @@ a {
   .sidebar-left { display: none; }
   .chat-area {
     .chat-message-area { 
-      @include flex(3);
+      @include flex(5);
       @include display(flex);
       @include flex-direction(column);
     }
@@ -210,7 +210,9 @@ a {
     .message-container {
       align-items: baseline;
 
-      .message { flex: 10 0; }
+      .username { width: 150px; }
+      .message { flex: 4 0; }
+      .timestamp { flex: 1; }
     }
   }
 }
@@ -224,7 +226,7 @@ a {
 
 // Large screens
 @media all and (min-width: 800px) {
-  .sidebar-left { display: block; }
+  .sidebar-left { display: block; @include flex(1); }
 }
 
 .users-list {
