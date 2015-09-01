@@ -66,7 +66,7 @@ var RoomMessagesComponent = Ractive.extend({
 		var messages = this.get('messages');
 		messages.push(data);
 
-		if (this._scrollPercentage() >= 98) this.scrollToBottom();
+		if (this._scrollPercentage() >= 90) this.scrollToBottom();
 	},
 
 	_scrollPercentage: function(element) {
