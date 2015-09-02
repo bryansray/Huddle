@@ -1,4 +1,10 @@
-var User = require('../models/user');
+var User = require('../models/user'),
+		Hotel = require('../models/hotel');
+
+// GET /rooms/:roomId/users
+// TODO : Should there be a way to get all the data for a specific room via the API?
+exports.show = function(req, res) {
+}
 
 exports.index = function(req, res) {
 	User.fetchAll().then(function(users) {

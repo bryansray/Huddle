@@ -6,20 +6,6 @@ var RoomUserComponent = require('components/roomUser');
 
 var RoomUsersComponent = Ractive.extend({
 	template: '#room-users-template',
-
-	oninit: function() {
-		this.root.socket.on('joined', _.bind(this.onJoined, this));
-		this.root.socket.on('part', this.onPart.bind(this));
-		this.root.socket.on('quit', this.onPart.bind(this));
-
-		var room = this.get('chat');
-
-		if (room) {
-			// Get a list of active users in the channel.
-			superagent.get('/rooms/' + room.id + '/users');
-		}
-	},
-
 	components: { 
 		RoomUser: RoomUserComponent 
 	},
@@ -30,9 +16,18 @@ var RoomUsersComponent = Ractive.extend({
 		};
 	},
 
+	onconfig: function() {
+		this.root.socket.on('joined', this.onJoined.bind(this));
+		this.root.socket.on('part', this.onPart.bind(this));
+		this.root.socket.on('quit', this.onPart.bind(this));
+	},
+
+	oninit: function() {
+		console.log("Initializing RoomUsers Component.");
+	},
+
 	onJoined: function(data) {
-		// TODO : This seems wrong ...
-		// if (data.roomId === this.get('chat.id'))
+		console.log("joined: ", data);
 		this.set('users', data.users);
 	},
 

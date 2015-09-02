@@ -36,6 +36,8 @@ module.exports = function(app, passport) {
 		.post(users.create);
 	app.route('/users/new').get(users.new);
 
+	app.route('/rooms/:roomId/users').get(users.show);
+
 	// Rooms
 	app.route('/rooms')
 		.get(rooms.index)

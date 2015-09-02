@@ -98,11 +98,6 @@ var RoomsComponent = Ractive.extend({
 	oninit: function() {
 		superagent.get('/user/participating', function(data, response) {
 			this.set('rooms', response.body);
-
-			if (typeof _preloadedRoomId !== 'undefined') {
-				var room = _.find(response.body, function(room) { return room.id === _preloadedRoomId; });
-				this.set('activeRoom', room);
-			}
 		}.bind(this));
 
 		this.root.on("Lobby.participateRoom", this.getParticipatingRooms.bind(this));
@@ -115,18 +110,6 @@ var RoomsComponent = Ractive.extend({
 		this.on('loadLobby', this.loadLobby);
 
 		this.observe('activeRoom', this.activateRoom);
-
-		// window.onpopstate = function(event) {
-		// 	if (event.state === null) return;
-		// 	if (event.state.room === null) return;
-
-		// 	var rooms = this.get('rooms'),
-		// 			room = _.find(rooms, function(room) { return room.id === event.state.room.id });
-
-		// 	document.title = event.state.title;
-
-		// 	this.set('activeRoom', room);
-		// }.bind(this);
 	},
 
 	getParticipatingRooms: function() {
@@ -138,12 +121,7 @@ var RoomsComponent = Ractive.extend({
 	activateRoom: function(room, previousRoom, keypath) {
 		if (room === null || room === undefined || room === previousRoom) return;
 
-		this.root.socket.emit('join', { roomId: room.id });
-
-
-		// var title = "Huddle .:. " + room.name;
-		// document.title = title;
-		// history.pushState({ room: room, title: title }, room.name, url);
+		
 	},
 
 	loadLobby: function(event, room) {
@@ -169,8 +147,6 @@ var RoomsComponent = Ractive.extend({
 	removeRoom: function(event, room) {
 		event.original.preventDefault();
 
-		// var index = _.findIndex(this.get('rooms'), 'id', room.id);
-		// this.splice('rooms', index, 1);
 		this.getParticipatingRooms();
 
 		if (this.get('activeRoom') === room)

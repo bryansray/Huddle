@@ -25,6 +25,9 @@ var ChatComponent = Ractive.extend({
 	oninit: function() {
 		this.observe('req', (req) => {
 			this.set('chat', req.body.room);
+			
+			if (req.body.room)
+				this.root.socket.emit('join', { roomId: req.body.room.id });
 		});
 
 		var rooms = this.root.findComponent('Rooms');
