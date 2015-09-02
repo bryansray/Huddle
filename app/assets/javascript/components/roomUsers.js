@@ -16,14 +16,10 @@ var RoomUsersComponent = Ractive.extend({
 		};
 	},
 
-	onconfig: function() {
+	oninit: function() {
 		this.root.socket.on('joined', this.onJoined.bind(this));
 		this.root.socket.on('part', this.onPart.bind(this));
 		this.root.socket.on('quit', this.onPart.bind(this));
-	},
-
-	oninit: function() {
-		console.log("Initializing RoomUsers Component.");
 	},
 
 	onJoined: function(data) {
