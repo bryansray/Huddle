@@ -10,8 +10,6 @@ exports.index = function(req, res) {
 };
 
 exports.create = function(req, res) {
-	console.log(req.body);
-
 	var userId = req.user.id,
 			roomId = req.body.id;
 

@@ -8,7 +8,6 @@ module.exports = function(io, socket) {
 		var hotel = socket.hotel;
 
 		hotel.forEach(function(value, key) {
-			console.log(key);
 			hotel.checkout(currentUserId, key);
 		});
 
