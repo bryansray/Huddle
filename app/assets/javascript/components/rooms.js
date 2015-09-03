@@ -120,8 +120,6 @@ var RoomsComponent = Ractive.extend({
 
 	activateRoom: function(room, previousRoom, keypath) {
 		if (room === null || room === undefined || room === previousRoom) return;
-
-		
 	},
 
 	loadLobby: function(event, room) {
