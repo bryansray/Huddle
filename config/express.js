@@ -17,8 +17,8 @@ var cookieParser = require('cookie-parser'),
 
 var middleware = {
 	locals: function(req, res, next) {
-		console.log(req);
-		// req.locals({ user: req.user });
+		// console.log(req);
+		req.locals({ user: req.user });
 		next();
 	}
 }
@@ -56,10 +56,17 @@ module.exports = function(db) {
 	// Show stack errors
 	app.set('showStackError');
 
+	// Logging
+	logger.token('body', function(req, res) {
+		return JSON.stringify(req.body, null, 4);
+	});
+
 	app.use(favicon('public/favicon.ico'));
 	app.use(logger('combined', { stream: accessLoggingStream }));
 	app.use(logger('combined', { stream: errorLoggingStream, skip: function(req, res) { return res.statusCode < 400; } }));
+
 	app.use(logger('dev'));
+	app.use(logger(':body', { skip: function(req, res) { return req.method !== "POST"; } }));
 
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
