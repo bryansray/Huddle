@@ -8,25 +8,30 @@ var User = Bookshelf.Model.extend({
 	hidden: ['password', 'salt', 'resetPasswordToken', 'resetPasswordExpirationDate'],
 
 	validations: {
-		password: { presence: true }
+		password: { presence: true },
+		firstName: { presence: true },
+		lastName: { presence: true },
+		displayName: { presence: true }
 	},
 
 	isValid: function() {
 		return validate(this.attributes, this.validations) === undefined;
 	},
 
-	validate: function(model, attrs, options) {
-		return validate(attrs, this.validations);
+	validateSave: function(model, attrs, options) {
+		return validate.async(attrs, this.validations);
+	},
+
+	encryptPassword: function() { 
+		var password = this.get('password');
+		if (password) {
+			this.set('salt', crypto.lib.WordArray.random(128/8).toString());
+			this.set('password', this.hashPassword(password));
+		}
 	},
 
 	initialize: function() {
-		this.on('saving', function() { 
-			var password = this.get('password');
-			if (password) {
-				this.set('salt', crypto.lib.WordArray.random(128/8).toString());
-				this.set('password', this.hashPassword(password));
-			}
-		}, this);
+		this.on('saving', this.validateSave, this.encryptPassword);
 	},
 
 	authenticate: function(password) {
