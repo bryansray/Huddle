@@ -17,12 +17,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
 	Room.forge(req.body).save().then(function(room) {
 		return res.json(room);
+	}).catch(function(err) {
+		return res.json(err);
 	});
-	// var room = new Room.Model({ name: name, description: description });
-
-	// room.save(function(err) {
-	// 	if (err) { console.log(err); }
-
-	// 	return res.json(room);
-	// });
 };

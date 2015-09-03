@@ -6,7 +6,7 @@ var Room = Bookshelf.Model.extend({
 	hasTimestamps: true,
 		
 	initialize: function() {
-		this.on('saving', this.validate, this);
+		this.on('saving', this.validateSave);
 	},
 
 	validations: {
@@ -25,8 +25,8 @@ var Room = Bookshelf.Model.extend({
 		return validate(this.attributes, this.validations) === undefined;
 	},
 
-	validate: function(model, attrs, options) {
-		return validate(attrs, this.validations);
+	validateSave: function(model, attrs, options) {
+		return validate.async(attrs, this.validations);
 	}
 });
 
